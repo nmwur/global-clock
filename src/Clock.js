@@ -8,6 +8,7 @@ import {
   addHours,
   addMinutes
 } from "date-fns";
+import PropTypes from "prop-types";
 
 const Clock = ({ city, timezone, shift, className }) => {
   const date = timezone ? getRemoteDate(timezone, shift) : getLocalDate(shift);
@@ -30,6 +31,11 @@ const Clock = ({ city, timezone, shift, className }) => {
       <City>{city}</City>
     </div>
   );
+};
+Clock.propTypes = {
+  city: PropTypes.string.isRequired,
+  timezone: PropTypes.number,
+  shift: PropTypes.number.isRequired
 };
 
 const getLocalDate = shift => addHours(new Date(), shift);

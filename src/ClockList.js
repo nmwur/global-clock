@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 import { Clock } from "./Clock";
 
@@ -16,6 +17,15 @@ const ClockList = ({ shift, clockList, className }) => (
     ))}
   </div>
 );
+ClockList.propTypes = {
+  shift: PropTypes.number.isRequired,
+  clockList: PropTypes.arrayOf(
+    PropTypes.shape({
+      city: PropTypes.string.isRequired,
+      timezone: PropTypes.number
+    })
+  ).isRequired
+};
 
 const StyledClockList = styled(ClockList)`
   position: fixed;

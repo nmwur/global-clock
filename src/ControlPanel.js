@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const ControlPanel = ({
   increaseShift,
@@ -13,6 +14,11 @@ const ControlPanel = ({
     <Button onClick={resetShift}>reset</Button>
   </div>
 );
+ControlPanel.propTypes = {
+  increaseShift: PropTypes.func.isRequired,
+  decreaseShift: PropTypes.func.isRequired,
+  resetShift: PropTypes.func.isRequired
+};
 
 const StyledControlPanel = styled(ControlPanel)`
   position: fixed;
