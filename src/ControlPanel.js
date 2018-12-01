@@ -3,20 +3,20 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 const ControlPanel = ({
-  increaseShift,
-  decreaseShift,
+  incrementShift,
+  decrementShift,
   resetShift,
   className
 }) => (
   <div className={className}>
-    <Button onClick={decreaseShift}>–</Button>
-    <Button onClick={increaseShift}>+</Button>
+    <Button onClick={decrementShift}>–</Button>
+    <Button onClick={incrementShift}>+</Button>
     <Button onClick={resetShift}>reset</Button>
   </div>
 );
 ControlPanel.propTypes = {
-  increaseShift: PropTypes.func.isRequired,
-  decreaseShift: PropTypes.func.isRequired,
+  incrementShift: PropTypes.func.isRequired,
+  decrementShift: PropTypes.func.isRequired,
   resetShift: PropTypes.func.isRequired
 };
 

@@ -23,19 +23,19 @@ class App extends Component {
       <React.Fragment>
         <ClockList shift={this.state.shift} clockList={this.state.clockList} />
         <ControlPanel
-          increaseShift={this.increaseShift.bind(this)}
-          decreaseShift={this.decreaseShift.bind(this)}
+          incrementShift={this.incrementShift.bind(this)}
+          decrementShift={this.decrementShift.bind(this)}
           resetShift={this.resetShift.bind(this)}
         />
       </React.Fragment>
     );
   }
 
-  increaseShift() {
+  incrementShift() {
     this.setState({ shift: this.state.shift + 1 });
   }
 
-  decreaseShift() {
+  decrementShift() {
     this.setState({ shift: this.state.shift - 1 });
   }
 

@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 import { Clock } from "./Clock";
 
-const ClockList = ({ shift, clockList, className }) => (
+const ClockList = ({ clockList, shift, className }) => (
   <div className={className}>
     <Clock city={`Local time`} shift={shift} />
     {clockList.map(clock => (
@@ -33,6 +33,7 @@ const StyledClockList = styled(ClockList)`
   width: 100vw;
   background-color: #cddcf0;
   box-sizing: border-box;
+  overflow-y: scroll;
 `;
 
 export { StyledClockList as ClockList };
