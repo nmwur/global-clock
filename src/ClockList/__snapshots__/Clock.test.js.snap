@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<StyledComponent
+  city="New York"
+  forwardedClass={
+    Object {
+      "$$typeof": Symbol(react.forward_ref),
+      "attrs": Array [],
+      "componentStyle": ComponentStyle {
+        "componentId": "sc-ifAKCX",
+        "isStatic": true,
+        "rules": Array [
+          "
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 20px;
+  margin-bottom: 5px;
+  border: 1px solid #b4c8d7;
+  border-radius: 3px;
+",
+        ],
+      },
+      "displayName": "Styled(Clock)",
+      "render": [Function],
+      "styledComponentId": "sc-ifAKCX",
+      "target": [Function],
+      "toString": [Function],
+      "warnTooManyClasses": [Function],
+      "withComponent": [Function],
+      Symbol(Symbol.hasInstance): [Function],
+    }
+  }
+  forwardedRef={null}
+  shift={2}
+  timezone={-7}
+/>
+`;
+
+exports[`renders correctly again 1`] = `
+<div
+  class="sc-ifAKCX dmSHNx"
+>
+  <div
+    class="sc-bwzfXH gmmHMg"
+  >
+    11:04 PM
+    <span
+      class="sc-htpNat fbWjVY"
+    >
+      Yesterday
+    </span>
+  </div>
+  <div
+    class="sc-bxivhb iWzsho"
+  >
+    New York
+  </div>
+</div>
+`;

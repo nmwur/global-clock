@@ -10,7 +10,9 @@ import {
 } from "date-fns";
 import PropTypes from "prop-types";
 
-const Clock = ({ city, timezone, shift, className }) => {
+import { DeleteClock } from "./DeleteClock";
+
+const Clock = ({ city, timezone, shift, editMode, deleteClock, className }) => {
   const date = timezone ? getRemoteDate(timezone, shift) : getLocalDate(shift);
   const formattedDate = format(date, "hh:mm A");
 
@@ -22,6 +24,8 @@ const Clock = ({ city, timezone, shift, className }) => {
         ? "Tomorrow"
         : format(date, "dddd");
 
+  const deleteClockHandler = () => deleteClock(city);
+
   return (
     <div className={className}>
       <Time>
@@ -29,13 +33,16 @@ const Clock = ({ city, timezone, shift, className }) => {
         <DifferentDay>{differentDay}</DifferentDay>
       </Time>
       <City>{city}</City>
+      {editMode && <DeleteClock deleteClock={deleteClockHandler} />}
     </div>
   );
 };
 Clock.propTypes = {
   city: PropTypes.string.isRequired,
   timezone: PropTypes.number,
-  shift: PropTypes.number.isRequired
+  shift: PropTypes.number.isRequired,
+  editMode: PropTypes.bool,
+  deleteClock: PropTypes.func
 };
 
 const getLocalDate = shift => addHours(new Date(), shift);
@@ -72,10 +79,11 @@ const City = styled.div`
 `;
 
 const StyledClock = styled(Clock)`
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: 10px 20px;
-  margin: 5px;
+  margin-bottom: 5px;
   border: 1px solid #b4c8d7;
   border-radius: 3px;
 `;

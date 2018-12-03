@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<Fragment>
+  <ClockList
+    editMode={false}
+    shift={0}
+  />
+  <Styled(ControlPanel)
+    decrementShift={[Function]}
+    editMode={false}
+    incrementShift={[Function]}
+    isChangeShiftDisabled={false}
+    isResetShiftDisabled={true}
+    resetShift={[Function]}
+    toggleEditMode={[Function]}
+  />
+</Fragment>
+`;

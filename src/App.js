@@ -6,26 +6,23 @@ import { ControlPanel } from "./ControlPanel";
 class App extends Component {
   state = {
     shift: 0,
-    clockList: [
-      {
-        city: "La Crosse",
-        timezone: -360
-      },
-      {
-        city: "Moscow",
-        timezone: 180
-      }
-    ]
+    editMode: false
   };
 
   render() {
+    const { shift, editMode } = this.state;
+
     return (
       <React.Fragment>
-        <ClockList shift={this.state.shift} clockList={this.state.clockList} />
+        <ClockList shift={shift} editMode={editMode} />
         <ControlPanel
+          isChangeShiftDisabled={editMode}
+          isResetShiftDisabled={shift === 0}
+          editMode={editMode}
           incrementShift={this.incrementShift.bind(this)}
           decrementShift={this.decrementShift.bind(this)}
           resetShift={this.resetShift.bind(this)}
+          toggleEditMode={this.toggleEditMode.bind(this)}
         />
       </React.Fragment>
     );
@@ -41,6 +38,11 @@ class App extends Component {
 
   resetShift() {
     this.setState({ shift: 0 });
+  }
+
+  toggleEditMode() {
+    this.setState({ editMode: !this.state.editMode });
+    this.resetShift();
   }
 }
 
