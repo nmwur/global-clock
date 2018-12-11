@@ -1,9 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
-const AddClock = ({ className }) => <div className={className}>add clock</div>;
+const AddClockButton = ({ addClock, className }) => (
+  <button onClick={addClock} className={className}>
+    add clock
+  </button>
+);
 
-const StyledAddClock = styled(AddClock)`
+const StyledAddClockButton = styled(AddClockButton)`
   display: inline-block;
   padding: 2px 4px;
   color: #737dc3;
@@ -17,4 +21,4 @@ const StyledAddClock = styled(AddClock)`
   }
 `;
 
-export { StyledAddClock as AddClock };
+export { StyledAddClockButton as AddClockButton };

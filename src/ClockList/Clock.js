@@ -10,9 +10,17 @@ import {
 } from "date-fns";
 import PropTypes from "prop-types";
 
-import { DeleteClock } from "./DeleteClock";
+import { DeleteClockButton } from "./DeleteClockButton";
 
-const Clock = ({ city, timezone, shift, editMode, deleteClock, className }) => {
+const Clock = ({
+  id,
+  city,
+  timezone,
+  shift,
+  editMode,
+  deleteClock,
+  className
+}) => {
   const date = timezone ? getRemoteDate(timezone, shift) : getLocalDate(shift);
   const formattedDate = format(date, "hh:mm A");
 
@@ -24,7 +32,7 @@ const Clock = ({ city, timezone, shift, editMode, deleteClock, className }) => {
         ? "Tomorrow"
         : format(date, "dddd");
 
-  const deleteClockHandler = () => deleteClock(city);
+  const deleteClockHandler = () => deleteClock(id);
 
   return (
     <div className={className}>
@@ -33,7 +41,7 @@ const Clock = ({ city, timezone, shift, editMode, deleteClock, className }) => {
         <DifferentDay>{differentDay}</DifferentDay>
       </Time>
       <City>{city}</City>
-      {editMode && <DeleteClock deleteClock={deleteClockHandler} />}
+      {editMode && <DeleteClockButton deleteClock={deleteClockHandler} />}
     </div>
   );
 };
@@ -71,6 +79,7 @@ const Time = styled.div`
 const DifferentDay = styled.span`
   font-size: 22px;
   font-weight: 400;
+  font-family: auto;
 `;
 
 const City = styled.div`
@@ -85,7 +94,6 @@ const StyledClock = styled(Clock)`
   padding: 10px 20px;
   margin-bottom: 5px;
   border: 1px solid #b4c8d7;
-  border-radius: 3px;
 `;
 
 export { StyledClock as Clock };

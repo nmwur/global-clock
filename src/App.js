@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import styled from "styled-components";
 
 import { ClockList } from "./ClockList";
 import { ControlPanel } from "./ControlPanel";
@@ -13,7 +14,7 @@ class App extends Component {
     const { shift, editMode } = this.state;
 
     return (
-      <React.Fragment>
+      <StyledApp>
         <ClockList shift={shift} editMode={editMode} />
         <ControlPanel
           isChangeShiftDisabled={editMode}
@@ -24,7 +25,7 @@ class App extends Component {
           resetShift={this.resetShift.bind(this)}
           toggleEditMode={this.toggleEditMode.bind(this)}
         />
-      </React.Fragment>
+      </StyledApp>
     );
   }
 
@@ -45,5 +46,11 @@ class App extends Component {
     this.resetShift();
   }
 }
+
+const StyledApp = styled.div`
+  position: relative;
+  background-color: #cddcf0;
+  min-height: 100vh;
+`;
 
 export default App;

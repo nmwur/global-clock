@@ -13,6 +13,9 @@ const ControlPanel = ({
   className
 }) => (
   <div className={className}>
+    <Button onClick={resetShift} disabled={isResetShiftDisabled}>
+      reset
+    </Button>
     <Button onClick={decrementShift} disabled={isChangeShiftDisabled}>
       <span role="img" aria-label="-">
         ➖
@@ -22,9 +25,6 @@ const ControlPanel = ({
       <span role="img" aria-label="+">
         ➕
       </span>
-    </Button>
-    <Button onClick={resetShift} disabled={isResetShiftDisabled}>
-      reset
     </Button>
     <Button onClick={toggleEditMode} editMode={editMode}>
       <span role="img" aria-label="edit">
@@ -45,16 +45,18 @@ ControlPanel.propTypes = {
 
 const StyledControlPanel = styled(ControlPanel)`
   position: fixed;
+  z-index: 2;
   bottom: 0;
+  left: 0;
+  width: 100%;
   height: 50px;
-  width: 100vw;
+  background-color: white;
   display: flex;
 `;
 
 const Button = styled.button`
   flex-basis: 33%;
   border: 1px solid ${props => (props.editMode ? "#f5af5f" : "transparent")};
-  border-radius: 3px;
   background: ${props => (props.editMode ? "#ffe187" : "none")};
   font-size: 20px;
   margin: 2px;
