@@ -1,13 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import {
-  format,
-  isToday,
-  isYesterday,
-  isTomorrow,
-  addHours,
-  addMinutes
-} from "date-fns";
+import { format, isToday, isYesterday, isTomorrow } from "date-fns";
 import PropTypes from "prop-types";
 
 import { DeleteClockButton } from "./DeleteClockButton";
@@ -15,14 +8,13 @@ import { DeleteClockButton } from "./DeleteClockButton";
 const Clock = ({
   id,
   city,
+  date,
   timezone,
-  shift,
   editMode,
   deleteClock,
   className
 }) => {
-  const date = timezone ? getRemoteDate(timezone, shift) : getLocalDate(shift);
-  const formattedDate = format(date, "hh:mm A");
+  const formattedDate = format(date, "hh:mm:ss A");
 
   const differentDay = isToday(date)
     ? ""
@@ -51,19 +43,6 @@ Clock.propTypes = {
   shift: PropTypes.number.isRequired,
   editMode: PropTypes.bool,
   deleteClock: PropTypes.func
-};
-
-const getLocalDate = shift => addHours(new Date(), shift);
-
-const getRemoteDate = (timezone, shift) => {
-  const localDate = getLocalDate(shift);
-  const localTimezone = localDate.getTimezoneOffset();
-
-  const remoteTimezone = -timezone;
-
-  const timezoneDifference = localTimezone - remoteTimezone;
-
-  return addMinutes(localDate, timezoneDifference);
 };
 
 const Time = styled.div`
