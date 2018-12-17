@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import uniqid from "uniqid";
 import { addHours, addMinutes } from "date-fns";
 
 import { Clock } from "./Clock";
@@ -15,11 +14,9 @@ export class ClockList extends React.Component {
     clockList: []
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     this.updateLocalDate();
-
-    const clockList = await this.fetchClockList();
-    this.setState({ clockList });
+    this.updateClockList();
   }
 
   componentWillUnmount() {
@@ -62,10 +59,15 @@ export class ClockList extends React.Component {
     this.setState({ localDate });
   }
 
+  async updateClockList() {
+    const clockList = await this.fetchClockList();
+    this.setState({ clockList });
+  }
+
   async fetchClockList() {
-    const data = await fetch("https://equable-stop.glitch.me/");
+    const data = await fetch("https://equable-stop.glitch.me/clocks");
     const json = await data.json();
-    return JSON.parse(json).clockList;
+    return JSON.parse(json);
   }
 
   addClock() {
@@ -76,19 +78,22 @@ export class ClockList extends React.Component {
     this.setState({ addClockMode: false });
   }
 
-  onAddClockSubmit(city, timezone) {
-    const newClock = {
-      id: uniqid(),
-      city,
-      timezone: Number(timezone) * 60
-    };
+  async onAddClockSubmit(city, timezone) {
+    await fetch(
+      `https://equable-stop.glitch.me/clocks?city=${city}&timezone=${Number(
+        timezone
+      ) * 60}`,
+      { method: "POST" }
+    );
 
-    this.setState({ clockList: [...this.state.clockList, newClock] });
+    this.updateClockList();
   }
 
   deleteClock(id) {
     const clockList = this.state.clockList.filter(clock => clock.id !== id);
     this.setState({ clockList });
+
+    fetch(`https://equable-stop.glitch.me/clocks/${id}`, { method: "DELETE" });
   }
 }
 ClockList.propTypes = {

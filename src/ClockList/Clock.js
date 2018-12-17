@@ -14,7 +14,7 @@ const Clock = ({
   deleteClock,
   className
 }) => {
-  const formattedDate = format(date, "hh:mm:ss A");
+  const formattedDate = format(date, "hh:mm A");
 
   const differentDay = isToday(date)
     ? ""
