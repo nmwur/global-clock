@@ -14,10 +14,15 @@ const StyledAddClockButton = styled(AddClockButton)`
   border: 1px solid transparent;
   background: none;
   outline: none;
+  cursor: pointer;
+  user-select: none;
 
-  &:active {
-    border-color: #f5af5f;
+  &:hover {
     background-color: #ffe187;
+  }
+  &:active {
+    background-color: #ffe187;
+    border-color: #f5af5f;
   }
 `;
 

@@ -7,7 +7,13 @@ import { Clock } from "./Clock";
 import { AddClockButton } from "./AddClockButton";
 import { AddClockForm } from "./AddClockForm";
 
+const BACKEND_URL = "https://equable-stop.glitch.me/clocks";
+
 export class ClockList extends React.Component {
+  static getDerivedStateFromProps({ shift }) {
+    return { localDate: getLocalDate(shift) };
+  }
+
   state = {
     addClockMode: false,
     localDate: getLocalDate(this.props.shift),
@@ -65,7 +71,7 @@ export class ClockList extends React.Component {
   }
 
   async fetchClockList() {
-    const data = await fetch("https://equable-stop.glitch.me/clocks");
+    const data = await fetch(BACKEND_URL);
     const json = await data.json();
     return JSON.parse(json);
   }
@@ -80,9 +86,7 @@ export class ClockList extends React.Component {
 
   async onAddClockSubmit(city, timezone) {
     await fetch(
-      `https://equable-stop.glitch.me/clocks?city=${city}&timezone=${Number(
-        timezone
-      ) * 60}`,
+      `${BACKEND_URL}?city=${city}&timezone=${Number(timezone) * 60}`,
       { method: "POST" }
     );
 
@@ -93,7 +97,7 @@ export class ClockList extends React.Component {
     const clockList = this.state.clockList.filter(clock => clock.id !== id);
     this.setState({ clockList });
 
-    fetch(`https://equable-stop.glitch.me/clocks/${id}`, { method: "DELETE" });
+    fetch(`${BACKEND_URL}/${id}`, { method: "DELETE" });
   }
 }
 ClockList.propTypes = {

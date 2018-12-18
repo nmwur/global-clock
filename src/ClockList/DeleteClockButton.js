@@ -17,11 +17,18 @@ const StyledDeleteClockButton = styled(DeleteClockButton)`
   right: 0;
   padding: 2px 4px;
   background: none;
+  border: 1px solid transparent;
   color: #737dc3;
   outline: none;
+  cursor: pointer;
+  user-select: none;
 
+  &:hover {
+    background-color: #ffe187;
+  }
   &:active {
     background-color: #ffe187;
+    border-color: #f5af5f;
   }
 `;
 
