@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { format, isToday, isYesterday, isTomorrow } from "date-fns";
+import { format } from "date-fns";
 import PropTypes from "prop-types";
 
 import { DeleteClockButton } from "./DeleteClockButton";
@@ -16,23 +16,12 @@ const Clock = ({
 }) => {
   const formattedDate = format(date, "hh:mm A");
 
-  const differentDay = isToday(date)
-    ? ""
-    : isYesterday(date)
-      ? "Yesterday"
-      : isTomorrow(date)
-        ? "Tomorrow"
-        : format(date, "dddd");
-
   const deleteClockHandler = () => deleteClock(id);
 
   return (
     <div className={className}>
-      <Time>
-        {formattedDate}
-        <DifferentDay>{differentDay}</DifferentDay>
-      </Time>
       <City>{city}</City>
+      <Time>{formattedDate}</Time>
       {editMode && <DeleteClockButton deleteClock={deleteClockHandler} />}
     </div>
   );
@@ -46,33 +35,31 @@ Clock.propTypes = {
 };
 
 const Time = styled.div`
-  font-size: 30px;
+  font-size: 18px;
   font-weight: 600;
   color: #ffb432;
   font-family: monospace;
   display: inline-flex;
   justify-content: space-between;
-  width: 100%;
-`;
-
-const DifferentDay = styled.span`
-  font-size: 22px;
-  font-weight: 400;
-  font-family: auto;
+  position: absolute;
+  left: calc(50% + 5px);
+  pointer-events: none;
 `;
 
 const City = styled.div`
-  font-size: 20px;
+  position: absolute;
+  left: 5px;
+  font-family: monospace;
+  font-size: 18px;
   color: #737dc3;
+  pointer-events: none;
 `;
 
 const StyledClock = styled(Clock)`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: 10px 20px;
-  margin-bottom: 5px;
-  border: 1px solid #b4c8d7;
+  min-height: 25px;
+  margin-bottom: 50px;
+  width: 100%;
+  border-bottom: 1px dashed #b4c8d7;
 `;
 
 export { StyledClock as Clock };

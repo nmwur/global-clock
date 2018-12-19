@@ -8,9 +8,11 @@ const AddClockButton = ({ addClock, className }) => (
 );
 
 const StyledAddClockButton = styled(AddClockButton)`
+  position: absolute;
   display: inline-block;
   padding: 2px 4px;
-  color: #737dc3;
+  color: #555;
+  font-family: monospace;
   border: 1px solid transparent;
   background: none;
   outline: none;

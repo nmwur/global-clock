@@ -59,6 +59,7 @@ const Button = styled.button`
   border: 1px solid ${props => (props.editMode ? "#f5af5f" : "transparent")};
   background: ${props => (props.editMode ? "#ffe187" : "none")};
   font-size: 20px;
+  font-family: monospace;
   margin: 2px;
   outline: none;
 

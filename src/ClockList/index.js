@@ -21,6 +21,7 @@ export class ClockList extends React.Component {
   };
 
   componentDidMount() {
+    this.scrollToNow();
     this.updateLocalDate();
     this.updateClockList();
   }
@@ -34,29 +35,43 @@ export class ClockList extends React.Component {
     const { addClockMode, localDate, clockList } = this.state;
 
     return (
-      <StyledClockList>
-        <Clock city={`Local time`} date={localDate} shift={shift} />
-        {clockList.map(clock => (
-          <Clock
-            id={clock.id}
-            city={clock.city}
-            date={getRemoteDate(localDate, clock.timezone)}
-            timezone={clock.timezone}
-            shift={shift}
-            editMode={editMode}
-            deleteClock={this.deleteClock.bind(this)}
-            key={clock.id}
-          />
-        ))}
-        {editMode && <AddClockButton addClock={this.addClock.bind(this)} />}
-        {addClockMode && (
-          <AddClockForm
-            onSubmit={this.onAddClockSubmit.bind(this)}
-            closeForm={this.closeAddClockForm.bind(this)}
-          />
-        )}
-      </StyledClockList>
+      <ScrollWrapper
+        ref={el => (this.scrollWrapper = el)}
+        onScroll={this.onScroll.bind(this)}
+      >
+        <StyledClockList ref={el => (this.clockList = el)}>
+          <Clock city={`Local time`} date={localDate} shift={shift} />
+          {clockList.map(clock => (
+            <Clock
+              id={clock.id}
+              city={clock.city}
+              date={getRemoteDate(localDate, clock.timezone)}
+              timezone={clock.timezone}
+              shift={shift}
+              editMode={editMode}
+              deleteClock={this.deleteClock.bind(this)}
+              key={clock.id}
+            />
+          ))}
+          {editMode && <AddClockButton addClock={this.addClock.bind(this)} />}
+          {addClockMode && (
+            <AddClockForm
+              onSubmit={this.onAddClockSubmit.bind(this)}
+              closeForm={this.closeAddClockForm.bind(this)}
+            />
+          )}
+        </StyledClockList>
+      </ScrollWrapper>
     );
+  }
+
+  scrollToNow() {
+    const { scrollWidth, clientWidth } = this.scrollWrapper;
+    this.scrollWrapper.scrollBy(scrollWidth / 2 - clientWidth / 2, 0);
+  }
+
+  onScroll(event) {
+    console.log(event.target.scrollLeft);
   }
 
   updateLocalDate() {
@@ -119,8 +134,14 @@ function getRemoteDate(localDate, timezone) {
   return addMinutes(localDate, timezoneDifference);
 }
 
+const ScrollWrapper = styled.div`
+  min-height: 100vh;
+  overflow-x: scroll;
+`;
+
 const StyledClockList = styled.div`
-  padding: 5px;
+  padding-top: 30px;
   padding-bottom: 50px;
   box-sizing: border-box;
+  width: 400vw;
 `;

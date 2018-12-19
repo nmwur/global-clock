@@ -13,12 +13,11 @@ DeleteClockButton.propTypes = {
 
 const StyledDeleteClockButton = styled(DeleteClockButton)`
   position: absolute;
-  bottom: 0;
   right: 0;
   padding: 2px 4px;
   background: none;
   border: 1px solid transparent;
-  color: #737dc3;
+  color: #555;
   outline: none;
   cursor: pointer;
   user-select: none;

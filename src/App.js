@@ -10,12 +10,17 @@ class App extends Component {
     editMode: false
   };
 
+  componentDidMount() {
+    this.app.scrollTo(50, 0);
+  }
+
   render() {
     const { shift, editMode } = this.state;
 
     return (
-      <StyledApp>
+      <StyledApp ref={el => (this.app = el)}>
         <ClockList shift={shift} editMode={editMode} />
+        <Scrubber />
         <ControlPanel
           isChangeShiftDisabled={editMode}
           isResetShiftDisabled={shift === 0}
@@ -50,7 +55,17 @@ class App extends Component {
 const StyledApp = styled.div`
   position: relative;
   background-color: #cddcf0;
-  min-height: 100vh;
+  font-family: monospace;
+`;
+
+const Scrubber = styled.div`
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 1;
+  width: 1px;
+  height: 100%;
+  border-left: 1px dashed #b4c8d7;
 `;
 
 export default App;
