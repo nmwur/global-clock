@@ -6,44 +6,27 @@ import { ControlPanel } from "./ControlPanel";
 
 class App extends Component {
   state = {
-    shift: 0,
     editMode: false
   };
 
-  componentDidMount() {
-    this.app.scrollTo(50, 0);
-  }
-
   render() {
-    const { shift, editMode } = this.state;
+    const { editMode } = this.state;
 
     return (
       <StyledApp ref={el => (this.app = el)}>
-        <ClockList shift={shift} editMode={editMode} />
+        <ClockList editMode={editMode} />
         <Scrubber />
         <ControlPanel
-          isChangeShiftDisabled={editMode}
-          isResetShiftDisabled={shift === 0}
           editMode={editMode}
-          incrementShift={this.incrementShift.bind(this)}
-          decrementShift={this.decrementShift.bind(this)}
-          resetShift={this.resetShift.bind(this)}
           toggleEditMode={this.toggleEditMode.bind(this)}
+          resetShift={this.resetShift.bind(this)}
         />
       </StyledApp>
     );
   }
 
-  incrementShift() {
-    this.setState({ shift: this.state.shift + 1 });
-  }
-
-  decrementShift() {
-    this.setState({ shift: this.state.shift - 1 });
-  }
-
   resetShift() {
-    this.setState({ shift: 0 });
+    // reimplement
   }
 
   toggleEditMode() {
@@ -65,7 +48,7 @@ const Scrubber = styled.div`
   z-index: 1;
   width: 1px;
   height: 100%;
-  border-left: 1px dashed #b4c8d7;
+  border-left: 2px dashed #ffb432;
 `;
 
 export default App;
