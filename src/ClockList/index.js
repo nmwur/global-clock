@@ -2,9 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { addMinutes, addDays } from "date-fns";
-import * as d3 from "d3";
 
-import { Clock } from "./Clock";
+import { Clock, getTimeScale } from "./Clock";
 import { AddClockButton } from "./AddClockButton";
 import { AddClockForm } from "./AddClockForm";
 
@@ -12,25 +11,21 @@ const BACKEND_URL = "https://equable-stop.glitch.me/clocks";
 
 export class ClockList extends React.Component {
   state = {
+    time: new Date(),
+    shift: 0,
+    isShiftBeingReset: false,
     addClockMode: false,
-    localTime: getLocalTime(),
-    scrolledTime: getLocalTime(), // DRY; round it if it doesn't match localTime
     clockList: []
   };
 
   componentDidMount() {
     this.scrollToNow();
-    this.updateLocalTime();
-    this.updateClockList();
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this.updateTimeout);
+    this.getClockList();
   }
 
   render() {
     const { editMode } = this.props;
-    const { addClockMode, localTime, scrolledTime, clockList } = this.state;
+    const { addClockMode, time, shift, clockList } = this.state;
 
     return (
       <ScrollWrapper
@@ -38,17 +33,13 @@ export class ClockList extends React.Component {
         onScroll={this.onScroll.bind(this)}
       >
         <StyledClockList ref={el => (this.clockList = el)}>
-          <Clock
-            city={`Local time`}
-            time={localTime}
-            scrolledTime={scrolledTime}
-          />
+          <Clock city={`Local time`} time={time} shift={shift} />
           {clockList.map(clock => (
             <Clock
               id={clock.id}
               city={clock.city}
-              time={getRemoteTime(localTime, clock.timezone)}
-              scrolledTime={getRemoteTime(scrolledTime, clock.timezone)}
+              time={getRemoteTime(time, clock.timezone)}
+              shift={shift}
               timezone={clock.timezone}
               editMode={editMode}
               deleteClock={this.deleteClock.bind(this)}
@@ -67,38 +58,31 @@ export class ClockList extends React.Component {
     );
   }
 
-  scrollToNow() {
-    this.scrollTo();
-  }
+  async scrollToNow() {
+    await this.setState({ isShiftBeingReset: true });
 
-  // DRYYY
-  scrollTo() {
     const { scrollWidth, clientWidth } = this.scrollWrapper;
     const defaultPosition = scrollWidth / 2 - clientWidth / 2;
-
-    this.scrollWrapper.scrollBy(defaultPosition, 0);
+    this.scrollWrapper.scrollLeft = defaultPosition;
   }
 
   onScroll() {
     const { scrollLeft, clientWidth } = this.scrollWrapper;
     const scrolledPosition = scrollLeft + clientWidth / 2;
 
-    const timeScale = d3 // DRY
-      .scaleTime()
-      .domain([addDays(new Date(), -2), addDays(new Date(), 2)])
-      .range([0, window.innerWidth * 3]);
-
+    const domain = [addDays(new Date(), -2), addDays(new Date(), 2)];
+    const timeScale = getTimeScale(domain);
     const scrolledTime = timeScale.invert(scrolledPosition);
-    this.setState({ scrolledTime });
+
+    const shift = getShift(this.state.time, scrolledTime);
+
+    this.setState({
+      shift: this.state.isShiftBeingReset ? 0 : shift,
+      isShiftBeingReset: false
+    });
   }
 
-  updateLocalTime() {
-    this.updateTimeout = setTimeout(this.updateLocalTime.bind(this), 1000);
-    const localTime = getLocalTime();
-    this.setState({ localTime });
-  }
-
-  async updateClockList() {
+  async getClockList() {
     const clockList = await this.fetchClockList();
     this.setState({ clockList });
   }
@@ -118,12 +102,12 @@ export class ClockList extends React.Component {
   }
 
   async onAddClockSubmit(city, timezone) {
-    await fetch(
-      `${BACKEND_URL}?city=${city}&timezone=${Number(timezone) * 60}`,
-      { method: "POST" }
-    );
+    const timezoneInMinutes = Number(timezone) * 60;
+    await fetch(`${BACKEND_URL}?city=${city}&timezone=${timezoneInMinutes}`, {
+      method: "POST"
+    });
 
-    this.updateClockList();
+    this.getClockList();
   }
 
   deleteClock(id) {
@@ -137,10 +121,6 @@ ClockList.propTypes = {
   editMode: PropTypes.bool.isRequired
 };
 
-function getLocalTime() {
-  return new Date();
-}
-
 function getRemoteTime(localTime, timezone) {
   const localTimezone = localTime.getTimezoneOffset();
 
@@ -149,6 +129,10 @@ function getRemoteTime(localTime, timezone) {
   const timezoneDifference = localTimezone - remoteTimezone;
 
   return addMinutes(localTime, timezoneDifference);
+}
+
+function getShift(time, scrolledTime) {
+  return scrolledTime - time;
 }
 
 const ScrollWrapper = styled.div`

@@ -5,8 +5,7 @@ import {
   addDays,
   getMinutes,
   setMinutes,
-  startOfMinute,
-  isEqual
+  startOfMinute
 } from "date-fns";
 import PropTypes from "prop-types";
 import * as d3 from "d3";
@@ -17,10 +16,8 @@ export class Clock extends React.Component {
   componentDidMount() {
     const { time } = this.props;
 
-    const timeScale = d3
-      .scaleTime()
-      .domain([addDays(time, -2), addDays(time, 2)])
-      .range([0, window.innerWidth * 3]);
+    const domain = [addDays(time, -2), addDays(time, 2)];
+    const timeScale = getTimeScale(domain);
     timeScale.ticks(d3.timeHour.every(6)); // d3.timeHour.every(5) doesn't work
     const xAxis = d3.axisBottom(timeScale).tickSizeOuter(0);
     const svg = d3
@@ -36,16 +33,12 @@ export class Clock extends React.Component {
   }
 
   render() {
-    const { city, time, scrolledTime, editMode } = this.props;
+    const { city, time, shift, editMode } = this.props;
 
-    // the compared items will be just scrolledTime and time
-    // refactor will be possible after state.scrolledTime in ClockList gets DRY
-    let roundedTime = isEqual(
-      roundToNearestMinutes(scrolledTime, 1),
-      roundToNearestMinutes(time, 1)
-    )
-      ? scrolledTime
-      : roundToNearestMinutes(scrolledTime, 15);
+    const scrolledTime = getScrolledTime(time, shift);
+
+    let roundedTime =
+      shift === 0 ? scrolledTime : roundToNearestMinutes(scrolledTime, 15);
 
     const formattedTime = format(roundedTime, "hh:mm A");
 
@@ -67,6 +60,7 @@ export class Clock extends React.Component {
 Clock.propTypes = {
   city: PropTypes.string.isRequired,
   time: PropTypes.instanceOf(Date).isRequired,
+  shift: PropTypes.number.isRequired,
   timezone: PropTypes.number,
   editMode: PropTypes.bool,
   deleteClock: PropTypes.func
@@ -75,6 +69,17 @@ Clock.propTypes = {
 function roundToNearestMinutes(date, interval) {
   var roundedMinutes = Math.floor(getMinutes(date) / interval) * interval;
   return setMinutes(startOfMinute(date), roundedMinutes);
+}
+
+function getScrolledTime(time, shift) {
+  return new Date(Number(time) + shift);
+}
+
+export function getTimeScale(domain) {
+  return d3
+    .scaleTime()
+    .domain(domain)
+    .range([0, window.innerWidth * 3]);
 }
 
 // choose more contrast color
