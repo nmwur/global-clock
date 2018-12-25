@@ -2,13 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-const DeleteClockButton = ({ deleteClock, className }) => (
-  <div onClick={deleteClock} className={className}>
+const DeleteClockButton = ({ onClick, className }) => (
+  <div onClick={onClick} className={className}>
     delete
   </div>
 );
 DeleteClockButton.propTypes = {
-  deleteClock: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired
 };
 
 const StyledDeleteClockButton = styled(DeleteClockButton)`

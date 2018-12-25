@@ -32,7 +32,8 @@ export class AddClockForm extends React.Component {
   }
 
   handleSubmit(event) {
-    this.props.onSubmit(this.city.value, this.timezone.value);
+    const timezoneInMinutes = Number(this.timezone.value) * 60;
+    this.props.onSubmit(this.city.value, timezoneInMinutes);
     this.props.closeForm();
     event.preventDefault();
   }
@@ -44,7 +45,8 @@ AddClockForm.propTypes = {
 
 const Label = styled.label`
   display: block;
-  margin-bottom: 10px;
+  color: #555;
+  margin: 0 20px 20px 10px;
 `;
 
 const TextInput = styled.input`
@@ -55,8 +57,9 @@ const TextInput = styled.input`
 `;
 
 const SubmitButton = styled.input`
-  min-height: 30px;
-  color: #737dc3;
+  min-height: 36px;
+  font-family: inherit;
+  color: #555;
   border: 1px solid transparent;
   background: none;
   outline: none;
@@ -75,6 +78,5 @@ const SubmitButton = styled.input`
 const StyledAddClockForm = styled.form`
   display: flex;
   flex-direction: column;
-  padding: 10px 20px;
-  margin-bottom: 5px;
+  padding: 10px 0 0 0;
 `;

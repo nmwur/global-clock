@@ -7,53 +7,58 @@ import { Clock, getTimeScale } from "./Clock";
 import { AddClockButton } from "./AddClockButton";
 import { AddClockForm } from "./AddClockForm";
 
-const BACKEND_URL = "https://equable-stop.glitch.me/clocks";
-
 export class ClockList extends React.Component {
   state = {
     time: new Date(),
     shift: 0,
     isShiftBeingReset: false,
-    addClockMode: false,
-    clockList: []
+    addClockMode: false
   };
 
   componentDidMount() {
+    this.props.onRef(this);
     this.scrollToNow();
-    this.getClockList();
+  }
+
+  componentWillUnmount() {
+    this.props.onRef(undefined);
   }
 
   render() {
-    const { editMode } = this.props;
-    const { addClockMode, time, shift, clockList } = this.state;
-
     return (
       <ScrollWrapper
         ref={el => (this.scrollWrapper = el)}
         onScroll={this.onScroll.bind(this)}
       >
         <StyledClockList ref={el => (this.clockList = el)}>
-          <Clock city={`Local time`} time={time} shift={shift} />
-          {clockList.map(clock => (
+          <Clock
+            city={`Local time`}
+            time={this.state.time}
+            shift={this.state.shift}
+          />
+          {this.props.clockList.map(clock => (
             <Clock
               id={clock.id}
               city={clock.city}
-              time={getRemoteTime(time, clock.timezone)}
-              shift={shift}
+              time={getRemoteTime(this.state.time, clock.timezone)}
+              shift={this.state.shift}
               timezone={clock.timezone}
-              editMode={editMode}
-              deleteClock={this.deleteClock.bind(this)}
+              editMode={this.props.editMode}
+              deleteClock={this.props.deleteClock.bind(this)}
               key={clock.id}
             />
           ))}
-          {editMode && <AddClockButton addClock={this.addClock.bind(this)} />}
-          {addClockMode && (
+          {this.props.editMode && (
+            <AddClockButton onClick={this.openAddClockForm.bind(this)} />
+          )}
+          {this.state.addClockMode && (
             <AddClockForm
-              onSubmit={this.onAddClockSubmit.bind(this)}
+              onSubmit={this.props.addClock.bind(this)}
               closeForm={this.closeAddClockForm.bind(this)}
             />
           )}
         </StyledClockList>
+        <Scrubber />
       </ScrollWrapper>
     );
   }
@@ -82,42 +87,23 @@ export class ClockList extends React.Component {
     });
   }
 
-  async getClockList() {
-    const clockList = await this.fetchClockList();
-    this.setState({ clockList });
-  }
-
-  async fetchClockList() {
-    const data = await fetch(BACKEND_URL);
-    const json = await data.json();
-    return JSON.parse(json);
-  }
-
-  addClock() {
+  openAddClockForm() {
     this.setState({ addClockMode: true });
   }
 
   closeAddClockForm() {
     this.setState({ addClockMode: false });
   }
-
-  async onAddClockSubmit(city, timezone) {
-    const timezoneInMinutes = Number(timezone) * 60;
-    await fetch(`${BACKEND_URL}?city=${city}&timezone=${timezoneInMinutes}`, {
-      method: "POST"
-    });
-
-    this.getClockList();
-  }
-
-  deleteClock(id) {
-    const clockList = this.state.clockList.filter(clock => clock.id !== id);
-    this.setState({ clockList });
-
-    fetch(`${BACKEND_URL}/${id}`, { method: "DELETE" });
-  }
 }
 ClockList.propTypes = {
+  clockList: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      city: PropTypes.string.isRequired,
+      timezone: PropTypes.number.isRequired
+    })
+  ).isRequired,
+  deleteClock: PropTypes.func,
   editMode: PropTypes.bool.isRequired
 };
 
@@ -138,6 +124,16 @@ function getShift(time, scrolledTime) {
 const ScrollWrapper = styled.div`
   min-height: 100vh;
   overflow-x: scroll;
+`;
+
+const Scrubber = styled.div`
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 1;
+  width: 1px;
+  height: 100%;
+  border-left: 2px dashed #ffb432;
 `;
 
 const StyledClockList = styled.div`

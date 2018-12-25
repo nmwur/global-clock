@@ -14,12 +14,12 @@ import { DeleteClockButton } from "./DeleteClockButton";
 
 export class Clock extends React.Component {
   componentDidMount() {
-    const { time } = this.props;
-
-    const domain = [addDays(time, -2), addDays(time, 2)];
+    const domain = [addDays(this.props.time, -2), addDays(this.props.time, 2)];
     const timeScale = getTimeScale(domain);
+
     timeScale.ticks(d3.timeHour.every(6)); // d3.timeHour.every(5) doesn't work
     const xAxis = d3.axisBottom(timeScale).tickSizeOuter(0);
+
     const svg = d3
       .select(this.clockRef)
       .append("svg")
@@ -33,21 +33,21 @@ export class Clock extends React.Component {
   }
 
   render() {
-    const { city, time, shift, editMode } = this.props;
-
-    const scrolledTime = getScrolledTime(time, shift);
+    const scrolledTime = getScrolledTime(this.props.time, this.props.shift);
 
     let roundedTime =
-      shift === 0 ? scrolledTime : roundToNearestMinutes(scrolledTime, 15);
+      this.props.shift === 0
+        ? scrolledTime
+        : roundToNearestMinutes(scrolledTime, 15);
 
     const formattedTime = format(roundedTime, "hh:mm A");
 
     return (
       <StyledClock ref={el => (this.clockRef = el)}>
-        <City>{city}</City>
+        <City>{this.props.city}</City>
         <Time>{formattedTime}</Time>
-        {editMode && (
-          <DeleteClockButton deleteClock={this.deleteClockHandler.bind(this)} />
+        {this.props.editMode && (
+          <DeleteClockButton onClick={this.deleteClockHandler.bind(this)} />
         )}
       </StyledClock>
     );

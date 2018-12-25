@@ -1,11 +1,15 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
-const AddClockButton = ({ addClock, className }) => (
-  <button onClick={addClock} className={className}>
+const AddClockButton = ({ onClick, className }) => (
+  <button onClick={onClick} className={className}>
     add clock
   </button>
 );
+AddClockButton.propTypes = {
+  onClick: PropTypes.func.isRequired
+};
 
 const StyledAddClockButton = styled(AddClockButton)`
   position: absolute;

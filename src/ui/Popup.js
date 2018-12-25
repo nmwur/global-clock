@@ -41,7 +41,6 @@ const StyledPopup = styled(Popup)`
   max-width: 400px;
   max-height: 70%;
   background-color: white;
-  padding: 10px 5px;
   overflow-y: auto;
 `;
 
