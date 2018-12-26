@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { ClockList } from "./ClockList";
 import { ControlPanel } from "./ControlPanel";
 
-const BACKEND_URL = "https://equable-stop.glitch.me/clocks";
+const BACKEND_URL = "https://global-clock-backend-bwccusuqek.now.sh/clocks";
 
 class App extends Component {
   state = {
@@ -50,9 +50,12 @@ class App extends Component {
   }
 
   async fetchClockList() {
-    const data = await fetch(BACKEND_URL);
-    const json = await data.json();
-    return JSON.parse(json);
+    try {
+      const data = await fetch(BACKEND_URL);
+      return await data.json();
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async addClock(city, timezone) {
