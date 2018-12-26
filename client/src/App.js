@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { ClockList } from "./ClockList";
 import { ControlPanel } from "./ControlPanel";
 
-const BACKEND_URL = "https://global-clock-backend-bwccusuqek.now.sh/clocks";
+const BACKEND_PATH = "/clocks";
 
 class App extends Component {
   state = {
@@ -51,15 +51,16 @@ class App extends Component {
 
   async fetchClockList() {
     try {
-      const data = await fetch(BACKEND_URL);
+      const data = await fetch(BACKEND_PATH);
       return await data.json();
     } catch (err) {
       console.log(err);
+      return [];
     }
   }
 
   async addClock(city, timezone) {
-    await fetch(`${BACKEND_URL}?city=${city}&timezone=${timezone}`, {
+    await fetch(`${BACKEND_PATH}?city=${city}&timezone=${timezone}`, {
       method: "POST"
     });
 
@@ -68,7 +69,7 @@ class App extends Component {
   }
 
   async deleteClock(id) {
-    await fetch(`${BACKEND_URL}/${id}`, { method: "DELETE" });
+    await fetch(`${BACKEND_PATH}/${id}`, { method: "DELETE" });
 
     const clockList = this.state.clockList.filter(clock => clock.id !== id);
     this.setState({ clockList });
