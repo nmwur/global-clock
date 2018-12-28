@@ -9,15 +9,7 @@ const path = require('path');
 
 const routes = require('./routes');
 
-const CLIENT_BUILT_DIRECTORY = path.join(__dirname, 'client/build');
-const CLIENT_INDEX = path.join(CLIENT_BUILT_DIRECTORY, 'index.html');
-
 const app = express();
-
-app.use(express.static(CLIENT_BUILT_DIRECTORY));
-app.get('', (req, res) => {
-  res.sendFile(CLIENT_INDEX);
-});
 
 app.use(cors());
 
@@ -36,6 +28,13 @@ db.on('error', console.error.bind(console, 'connection error:'));
 
 app.use('/clocks', routes);
 
+const CLIENT_BUILT_DIRECTORY = path.join(__dirname, 'client/build');
+const CLIENT_INDEX = path.join(CLIENT_BUILT_DIRECTORY, 'index.html');
+app.use(express.static(CLIENT_BUILT_DIRECTORY));
+app.get('/', (req, res) => {
+  res.sendFile(CLIENT_INDEX);
+});
+
 app.use((err, req, res) => {
   res.status(err.status || 500);
   res.json({
@@ -46,6 +45,8 @@ app.use((err, req, res) => {
 });
 
 const port = process.env.PORT || 8080;
-const listener = app.listen(port, () => {
-  console.log(`Your app is listening on port ${listener.address().port}`);
+app.listen(port, () => {
+  console.log('Your app is listening on port', port);
 });
+
+module.exports = app;

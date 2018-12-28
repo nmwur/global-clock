@@ -3,12 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "workspaces": [
     "client"
   ],
   "scripts": {
-    "start": "node server",
+    "start": "node .",
     "deploy": "now"
   },
   "dependencies": {
