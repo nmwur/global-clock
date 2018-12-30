@@ -64,7 +64,10 @@ export class ClockList extends React.Component {
   }
 
   async scrollToNow() {
-    await this.setState({ isShiftBeingReset: true });
+    await this.setState({
+      time: new Date(),
+      isShiftBeingReset: true
+    });
 
     const { scrollWidth, clientWidth } = this.scrollWrapper;
     const defaultPosition = scrollWidth / 2 - clientWidth / 2;
