@@ -46,7 +46,7 @@ export class Clock extends React.Component {
       <StyledClock ref={el => (this.clockRef = el)}>
         <City>{this.props.city}</City>
         <Time>{formattedTime}</Time>
-        {this.props.editMode && (
+        {this.props.isEditMode && (
           <DeleteClockButton onClick={this.deleteClockHandler.bind(this)} />
         )}
       </StyledClock>
@@ -62,7 +62,7 @@ Clock.propTypes = {
   time: PropTypes.instanceOf(Date).isRequired,
   shift: PropTypes.number.isRequired,
   timezone: PropTypes.number,
-  editMode: PropTypes.bool,
+  isisEditMode: PropTypes.bool,
   deleteClock: PropTypes.func
 };
 

@@ -8,7 +8,7 @@ const BACKEND_PATH = "/clocks";
 
 class App extends Component {
   state = {
-    editMode: false,
+    isEditMode: false,
     clockList: []
   };
 
@@ -23,13 +23,14 @@ class App extends Component {
           clockList={this.state.clockList}
           addClock={this.addClock.bind(this)}
           deleteClock={this.deleteClock.bind(this)}
-          editMode={this.state.editMode}
+          isEditMode={this.state.isEditMode}
           onRef={ref => (this.clockList = ref)}
         />
         <ControlPanel
-          editMode={this.state.editMode}
+          isEditMode={this.state.isEditMode}
           toggleEditMode={this.toggleEditMode.bind(this)}
           resetShift={this.resetShift.bind(this)}
+          updateClockList={this.updateClockList.bind(this)}
         />
       </StyledApp>
     );
@@ -40,7 +41,7 @@ class App extends Component {
   }
 
   toggleEditMode() {
-    this.setState({ editMode: !this.state.editMode });
+    this.setState({ isEditMode: !this.state.isEditMode });
     this.resetShift();
   }
 
@@ -51,9 +52,10 @@ class App extends Component {
 
   async fetchClockList() {
     try {
-      const data = await fetch(BACKEND_PATH);
+      const data = await fetch(BACKEND_PATH, { credentials: "same-origin" });
       return await data.json();
     } catch (err) {
+      // elaborate
       console.log(err);
       return [];
     }

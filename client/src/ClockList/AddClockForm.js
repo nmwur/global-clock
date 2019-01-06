@@ -11,7 +11,7 @@ export class AddClockForm extends React.Component {
 
   render() {
     return (
-      <Popup closePopup={this.props.closeForm}>
+      <Popup onClose={this.props.closeForm}>
         <StyledAddClockForm onSubmit={this.handleSubmit.bind(this)}>
           <Label>
             City:

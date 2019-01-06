@@ -8,16 +8,19 @@
     "client"
   ],
   "scripts": {
-    "start": "node .",
+    "start": "nodemon .",
     "deploy": "now"
   },
   "dependencies": {
+    "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.3",
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
+    "google-auth-library": "^2.0.2",
     "mongoose": "^5.4.0",
+    "multer": "^1.4.1",
     "uniqid": "^5.0.3"
   },
   "license": "MIT",

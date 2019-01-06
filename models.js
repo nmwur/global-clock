@@ -5,16 +5,19 @@ const { Schema } = mongoose;
 const ClockSchema = new Schema(
   {
     city: String,
-    timezone: Number
+    timezone: Number,
+    order: Number,
+    userId: String
   },
   {
     toJSON: {
       virtuals: true,
-      transform: (doc, { city, timezone }) => ({
+      transform: (doc, { city, timezone, order }) => ({
         // eslint-disable-next-line no-underscore-dangle
         id: doc._id,
         city,
-        timezone
+        timezone,
+        order
       })
     }
   }
@@ -22,4 +25,4 @@ const ClockSchema = new Schema(
 
 const Clock = mongoose.model('Clock', ClockSchema);
 
-module.exports = Clock;
+module.exports = { Clock };

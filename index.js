@@ -1,17 +1,29 @@
 /* eslint-disable no-console */
+/* eslint-disable consistent-return */
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const session = require('express-session');
-require('connect-mongo')(session);
+const MongoStore = require('connect-mongo')(session);
 const path = require('path');
-
+const { OAuth2Client } = require('google-auth-library');
+const bodyParser = require('body-parser');
+const multer = require('multer');
+const uniqid = require('uniqid');
 const routes = require('./routes');
+
+const { User } = require('./models');
+
+const client = new OAuth2Client(process.env.CLIENT_ID);
 
 const app = express();
 
 app.use(cors());
+
+const upload = multer();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect(
   process.env.DB_HOST,
@@ -26,6 +38,18 @@ mongoose.connect(
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
+app.use(
+  session({
+    secret: 'i love you',
+    resave: true,
+    saveUninitialized: false,
+    store: new MongoStore({
+      mongooseConnection: db,
+      ttl: 30 * 24 * 60 * 60 // 30 days
+    })
+  })
+);
+
 app.use('/clocks', routes);
 
 const CLIENT_BUILT_DIRECTORY = path.join(__dirname, 'client/build');
@@ -33,6 +57,27 @@ const CLIENT_INDEX = path.join(CLIENT_BUILT_DIRECTORY, 'index.html');
 app.use(express.static(CLIENT_BUILT_DIRECTORY));
 app.get('/', (req, res) => {
   res.sendFile(CLIENT_INDEX);
+});
+
+async function verifyToken(idToken) {
+  const ticket = await client.verifyIdToken({
+    idToken,
+    audience: process.env.CLIENT_ID
+  });
+
+  return ticket.getPayload();
+}
+
+app.post('/tokensignin', upload.array(), async (req, res) => {
+  try {
+    const googleUserInfo = await verifyToken(req.body.idToken);
+    req.session.userId = googleUserInfo.sub;
+    req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
+    res.status(204).end();
+  }
+  catch (error) {
+    console.log(error);
+  }
 });
 
 app.use((err, req, res) => {

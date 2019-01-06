@@ -25,6 +25,8 @@ export class ClockList extends React.Component {
   }
 
   render() {
+    console.log(document.cookie);
+
     return (
       <ScrollWrapper
         ref={el => (this.scrollWrapper = el)}
@@ -43,12 +45,12 @@ export class ClockList extends React.Component {
               time={getRemoteTime(this.state.time, clock.timezone)}
               shift={this.state.shift}
               timezone={clock.timezone}
-              editMode={this.props.editMode}
+              isEditMode={this.props.isEditMode}
               deleteClock={this.props.deleteClock.bind(this)}
               key={clock.id}
             />
           ))}
-          {this.props.editMode && (
+          {this.props.isEditMode && (
             <AddClockButton onClick={this.openAddClockForm.bind(this)} />
           )}
           {this.state.addClockMode && (
@@ -78,8 +80,8 @@ export class ClockList extends React.Component {
     const { scrollLeft, clientWidth } = this.scrollWrapper;
     const scrolledPosition = scrollLeft + clientWidth / 2;
 
-    const domain = [addDays(new Date(), -2), addDays(new Date(), 2)];
-    const timeScale = getTimeScale(domain);
+    const domain = [addDays(new Date(), -2), addDays(new Date(), 2)]; // dry
+    const timeScale = getTimeScale(domain); // dry
     const scrolledTime = timeScale.invert(scrolledPosition);
 
     const shift = getShift(this.state.time, scrolledTime);
@@ -107,7 +109,7 @@ ClockList.propTypes = {
     })
   ).isRequired,
   deleteClock: PropTypes.func,
-  editMode: PropTypes.bool.isRequired
+  isEditMode: PropTypes.bool.isRequired
 };
 
 function getRemoteTime(localTime, timezone) {

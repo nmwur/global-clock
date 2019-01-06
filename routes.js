@@ -4,25 +4,41 @@ const { Router } = require('express');
 
 const router = Router();
 
-const Clock = require('./models');
+const { Clock } = require('./models');
+
+router.use((req, res, next) => {
+  if (!req.session.userId) {
+    req.statusCode(401).end();
+  }
+  else {
+    next();
+  }
+});
 
 router.param('id', (req, res, next, id) => {
-  Clock.findById(id, (err, doc) => {
-    if (err) return next(err);
+  Clock.findOne(
+    {
+      id,
+      userId: req.session.userId
+    },
+    (err, doc) => {
+      if (err) return next(err);
 
-    if (!doc) {
-      const notFoundErr = new Error('Not found');
-      notFoundErr.status = 404;
-      return next(notFoundErr);
+      if (!doc) {
+        const notFoundErr = new Error('Not found');
+        notFoundErr.status = 404;
+        return next(notFoundErr);
+      }
+
+      req.clock = doc;
+      return next();
     }
-
-    req.clock = doc;
-    return next();
-  });
+  );
 });
 
 router.get('/', (req, res, next) => {
-  Clock.find((err, clocks) => {
+  console.log('inside request:', req.sessionID);
+  Clock.find({ userId: req.session.userId }, (err, clocks) => {
     if (err) return next(err);
 
     res.json(clocks);
@@ -32,7 +48,8 @@ router.get('/', (req, res, next) => {
 router.post('/', (req, res, next) => {
   const clock = new Clock({
     city: req.query.city,
-    timezone: req.query.timezone
+    timezone: req.query.timezone,
+    userId: req.session.userId
   });
 
   clock.save((err, newClock) => {

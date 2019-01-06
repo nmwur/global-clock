@@ -2,11 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-const Popup = ({ closePopup, children, className }) => {
+const Popup = ({ onClose, children, className }) => {
   let popup = null;
   const closePopupHandler = event => {
     if (!popup.contains(event.target)) {
-      closePopup();
+      onClose();
     }
   };
 
@@ -19,7 +19,7 @@ const Popup = ({ closePopup, children, className }) => {
   );
 };
 Popup.propTypes = {
-  closePopup: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired
 };
 
