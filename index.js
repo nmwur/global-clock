@@ -10,10 +10,7 @@ const path = require('path');
 const { OAuth2Client } = require('google-auth-library');
 const bodyParser = require('body-parser');
 const multer = require('multer');
-const uniqid = require('uniqid');
 const routes = require('./routes');
-
-const { User } = require('./models');
 
 const client = new OAuth2Client(process.env.CLIENT_ID);
 
@@ -76,8 +73,13 @@ app.post('/tokensignin', upload.array(), async (req, res) => {
     res.status(204).end();
   }
   catch (error) {
-    console.log(error);
+    console.error(error);
   }
+});
+
+app.get('/tokensignout', async (req, res) => {
+  req.session.destroy();
+  res.status(204).end();
 });
 
 app.use((err, req, res) => {

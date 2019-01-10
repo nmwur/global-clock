@@ -8,7 +8,7 @@ const { Clock } = require('./models');
 
 router.use((req, res, next) => {
   if (!req.session.userId) {
-    req.statusCode(401).end();
+    res.status(204).end();
   }
   else {
     next();
@@ -16,28 +16,21 @@ router.use((req, res, next) => {
 });
 
 router.param('id', (req, res, next, id) => {
-  Clock.findOne(
-    {
-      id,
-      userId: req.session.userId
-    },
-    (err, doc) => {
-      if (err) return next(err);
+  Clock.findById(id, (err, doc) => {
+    if (err) return next(err);
 
-      if (!doc) {
-        const notFoundErr = new Error('Not found');
-        notFoundErr.status = 404;
-        return next(notFoundErr);
-      }
-
-      req.clock = doc;
-      return next();
+    if (!doc) {
+      const notFoundErr = new Error('Not found');
+      notFoundErr.status = 404;
+      return next(notFoundErr);
     }
-  );
+
+    req.clock = doc;
+    return next();
+  });
 });
 
 router.get('/', (req, res, next) => {
-  console.log('inside request:', req.sessionID);
   Clock.find({ userId: req.session.userId }, (err, clocks) => {
     if (err) return next(err);
 
