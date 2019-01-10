@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
@@ -23,6 +23,6 @@ const ClockSchema = new Schema(
   }
 );
 
-const Clock = mongoose.model('Clock', ClockSchema);
+const Clock = mongoose.model("Clock", ClockSchema);
 
 module.exports = { Clock };

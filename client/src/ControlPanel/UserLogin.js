@@ -50,9 +50,6 @@ export class UserLogin extends React.Component {
 
     const idToken = googleUser.getAuthResponse().id_token;
     this.createSession(idToken);
-
-    const userPicUrl = googleUser.w3.Paa;
-    this.props.updateUserPicUrl(userPicUrl);
   }
 
   onFailure(response) {

@@ -28,7 +28,7 @@ export class ControlPanel extends React.Component {
         </Button>
         <Button onClick={this.openUserPopup.bind(this)}>
           {this.props.isLoggedIn ? (
-            <UserPic src={this.state.userPicUrl} alt="user pic" />
+            <UserPic src={this.state.userPicUrl} />
           ) : (
             `login`
           )}
@@ -43,11 +43,20 @@ export class ControlPanel extends React.Component {
             <UserLogin
               closeUserPopup={this.closeUserPopup.bind(this)}
               updateClockList={this.props.updateClockList.bind(this)}
-              updateUserPicUrl={this.updateUserPicUrl.bind(this)}
             />
           ))}
       </StyledControlPanel>
     );
+  }
+
+  async componentDidUpdate(prevProps) {
+    if (!prevProps.isLoggedIn && this.props.isLoggedIn) {
+      const response = await fetch("/userpicurl");
+      const userPicUrl = await response.text();
+      this.setState({ userPicUrl });
+    } else if (prevProps.isLoggedIn && !this.props.isLoggedIn) {
+      this.setState({ userPicUrl: null });
+    }
   }
 
   openUserPopup() {
@@ -56,10 +65,6 @@ export class ControlPanel extends React.Component {
 
   closeUserPopup() {
     this.setState({ isUserMode: false });
-  }
-
-  updateUserPicUrl(userPicUrl) {
-    this.setState({ userPicUrl });
   }
 }
 ControlPanel.propTypes = {
@@ -74,7 +79,7 @@ const Button = styled.button`
   flex-basis: 33%;
   border: 1px solid ${props => (props.isEditMode ? "#f5af5f" : "transparent")};
   background: ${props => (props.isEditMode ? "#ffe187" : "none")};
-  font-size: 16px;
+  font-size: 20px;
   font-family: monospace;
   display: flex;
   align-items: center;
