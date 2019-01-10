@@ -21,7 +21,12 @@ export class UserLogin extends React.Component {
   render() {
     return (
       <Popup onClose={this.props.closeUserPopup.bind(this)}>
-        <div id="login-button" />
+        <StyledUserLogin>
+          <Appeal>
+            Log in with your Google account to be able to save clocks:
+          </Appeal>
+          <div id="login-button" />
+        </StyledUserLogin>
       </Popup>
     );
   }
@@ -38,8 +43,9 @@ export class UserLogin extends React.Component {
   renderLoginButton() {
     window.gapi.signin2.render("login-button", {
       scope: "openid",
-      width: 200,
+      width: 120,
       height: 50,
+      text: "Login",
       onsuccess: this.onSuccess.bind(this),
       onfailure: this.onFailure.bind(this)
     });
@@ -67,3 +73,17 @@ export class UserLogin extends React.Component {
     }
   }
 }
+UserLogin.propTypes = {
+  updateClockList: PropTypes.func.isRequired,
+  closeUserPopup: PropTypes.func.isRequired
+};
+
+const Appeal = styled.div`
+  color: #343434;
+  font-size: 16px;
+  margin-bottom: 10px;
+`;
+
+const StyledUserLogin = styled.div`
+  padding: 10px;
+`;

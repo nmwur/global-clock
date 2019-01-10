@@ -19,12 +19,15 @@ export class UserLogout extends React.Component {
   render() {
     return (
       <Popup onClose={this.props.closeUserPopup.bind(this)}>
-        <button
-          disabled={!this.state.isGapiLoaded}
-          onClick={this.logout.bind(this)}
-        >
-          Logout
-        </button>
+        <StyledUserLogout>
+          <Appeal>Log out of your Google account:</Appeal>
+          <Button
+            disabled={!this.state.isGapiLoaded}
+            onClick={this.logout.bind(this)}
+          >
+            Logout
+          </Button>
+        </StyledUserLogout>
       </Popup>
     );
   }
@@ -62,3 +65,30 @@ export class UserLogout extends React.Component {
     console.error(response);
   }
 }
+UserLogout.propTypes = {
+  updateClockList: PropTypes.func.isRequired,
+  closeUserPopup: PropTypes.func.isRequired
+};
+
+const Button = styled.button`
+  width: 120px;
+  height: 50px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
+  color: #757575;
+  border-radius: 1px;
+  border: 1px solid white;
+  font-family: arial;
+  font-size: 16px;
+  background-color: #fff;
+  cursor: pointer;
+`;
+
+const Appeal = styled.div`
+  color: #343434;
+  font-size: 16px;
+  margin-bottom: 10px;
+`;
+
+const StyledUserLogout = styled.div`
+  padding: 10px;
+`;
