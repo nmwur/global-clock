@@ -1,0 +1,17 @@
+[
+  {
+    "id": "b",
+    "city": "Bristol",
+    "timezone": 0
+  },
+  {
+    "id": "s",
+    "city": "Singapore",
+    "timezone": 480
+  },
+  {
+    "id": "v",
+    "city": "Vancouver",
+    "timezone": -480
+  }
+]

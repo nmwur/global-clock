@@ -1,15 +1,19 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import uniqid from "uniqid";
 
 import { ClockList } from "./ClockList";
 import { ControlPanel } from "./ControlPanel";
+import defaultClockList from "./defaultClockList.json";
 
 const BACKEND_PATH = "/clocks";
 
 class App extends Component {
   state = {
     isEditMode: false,
-    clockList: []
+    isLoggedIn: false,
+    clockList: defaultClockList,
+    isDefaultClockListModified: false
   };
 
   componentDidMount() {
@@ -28,6 +32,7 @@ class App extends Component {
         />
         <ControlPanel
           isEditMode={this.state.isEditMode}
+          isLoggedIn={this.state.isLoggedIn}
           toggleEditMode={this.toggleEditMode.bind(this)}
           resetShift={this.resetShift.bind(this)}
           updateClockList={this.updateClockList.bind(this)}
@@ -46,32 +51,49 @@ class App extends Component {
   }
 
   async updateClockList() {
-    const clockList = await this.fetchClockList();
-    this.setState({ clockList });
-  }
-
-  async fetchClockList() {
     try {
-      const data = await fetch(BACKEND_PATH, { credentials: "same-origin" });
-      return await data.json();
+      const response = await fetch(BACKEND_PATH, {
+        credentials: "same-origin"
+      });
+
+      const isLoggedIn = this.checkIfSignedIn(response.status);
+      if (isLoggedIn) {
+        const clockList = await response.json();
+        this.setState({ isLoggedIn, clockList });
+      } else {
+        this.setState({ isLoggedIn, clockList: defaultClockList });
+      }
     } catch (err) {
-      // elaborate
-      console.log(err);
-      return [];
+      console.error(err);
     }
   }
 
-  async addClock(city, timezone) {
-    await fetch(`${BACKEND_PATH}?city=${city}&timezone=${timezone}`, {
+  checkIfSignedIn(statusCode) {
+    return statusCode === 204
+      ? false
+      : statusCode === 200
+      ? true
+      : this.state.isLoggedIn;
+  }
+
+  addClock(city, timezone) {
+    fetch(`${BACKEND_PATH}?city=${city}&timezone=${timezone}`, {
       method: "POST"
     });
 
-    // or return something from fetch? or just setstate?
-    this.updateClockList();
+    const clockList = [
+      ...this.state.clockList,
+      {
+        id: uniqid(),
+        city,
+        timezone
+      }
+    ];
+    this.setState({ clockList });
   }
 
-  async deleteClock(id) {
-    await fetch(`${BACKEND_PATH}/${id}`, { method: "DELETE" });
+  deleteClock(id) {
+    fetch(`${BACKEND_PATH}/${id}`, { method: "DELETE" });
 
     const clockList = this.state.clockList.filter(clock => clock.id !== id);
     this.setState({ clockList });

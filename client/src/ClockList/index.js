@@ -25,8 +25,6 @@ export class ClockList extends React.Component {
   }
 
   render() {
-    console.log(document.cookie);
-
     return (
       <ScrollWrapper
         ref={el => (this.scrollWrapper = el)}
