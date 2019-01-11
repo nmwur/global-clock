@@ -26,22 +26,23 @@ export class ControlPanel extends React.Component {
             ✏️
           </span>
         </Button>
-        <Button onClick={this.openUserPopup.bind(this)}>
+        <Button onClick={this.toggleUserMode.bind(this)}>
           {this.props.isLoggedIn ? (
             <UserPic src={this.state.userPicUrl} />
           ) : (
             `login`
           )}
         </Button>
+
         {this.state.isUserMode &&
           (this.props.isLoggedIn ? (
             <UserLogout
-              closeUserPopup={this.closeUserPopup.bind(this)}
+              closeUserPopup={this.toggleUserMode.bind(this)}
               updateClockList={this.props.updateClockList.bind(this)}
             />
           ) : (
             <UserLogin
-              closeUserPopup={this.closeUserPopup.bind(this)}
+              closeUserPopup={this.toggleUserMode.bind(this)}
               updateClockList={this.props.updateClockList.bind(this)}
             />
           ))}
@@ -59,12 +60,8 @@ export class ControlPanel extends React.Component {
     }
   }
 
-  openUserPopup() {
-    this.setState({ isUserMode: true });
-  }
-
-  closeUserPopup() {
-    this.setState({ isUserMode: false });
+  toggleUserMode() {
+    this.setState({ isUserMode: !this.state.isUserMode });
   }
 }
 ControlPanel.propTypes = {

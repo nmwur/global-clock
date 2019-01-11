@@ -1,13 +1,22 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { addMinutes, addDays } from "date-fns";
+import { addMinutes } from "date-fns";
 
-import { Clock, getTimeScale } from "./Clock";
+import getTimeScale from "./getTimeScale";
+import { timeline } from "ui/constants";
+
+import { Clock } from "./Clock";
 import { AddClockButton } from "./AddClockButton";
 import { AddClockForm } from "./AddClockForm";
 
 export class ClockList extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.timeScale = getTimeScale(new Date());
+  }
+
   state = {
     time: new Date(),
     shift: 0,
@@ -63,24 +72,24 @@ export class ClockList extends React.Component {
     );
   }
 
-  async scrollToNow() {
-    await this.setState({
-      time: new Date(),
-      isShiftBeingReset: true
-    });
+  scrollTo(time) {
+    this.setState({ time });
 
-    const { scrollWidth, clientWidth } = this.scrollWrapper;
-    const defaultPosition = scrollWidth / 2 - clientWidth / 2;
-    this.scrollWrapper.scrollLeft = defaultPosition;
+    const scaledTime = this.timeScale(time);
+    const halfScreenOffset = this.scrollWrapper.clientWidth / 2;
+    this.scrollWrapper.scrollLeft = scaledTime - halfScreenOffset;
+  }
+
+  async scrollToNow() {
+    await this.setState({ isShiftBeingReset: true });
+    this.scrollTo(new Date());
   }
 
   onScroll() {
     const { scrollLeft, clientWidth } = this.scrollWrapper;
     const scrolledPosition = scrollLeft + clientWidth / 2;
 
-    const domain = [addDays(new Date(), -2), addDays(new Date(), 2)]; // dry
-    const timeScale = getTimeScale(domain); // dry
-    const scrolledTime = timeScale.invert(scrolledPosition);
+    const scrolledTime = this.timeScale.invert(scrolledPosition);
 
     const shift = getShift(this.state.time, scrolledTime);
 
@@ -143,5 +152,5 @@ const StyledClockList = styled.div`
   padding-top: 30px;
   padding-bottom: 50px;
   box-sizing: border-box;
-  width: 300vw;
+  width: calc(100vw * ${timeline.width});
 `;

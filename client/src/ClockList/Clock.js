@@ -1,29 +1,32 @@
 import React from "react";
 import styled from "styled-components";
-import {
-  format,
-  addDays,
-  getMinutes,
-  setMinutes,
-  startOfMinute
-} from "date-fns";
+import { format, getMinutes, setMinutes, startOfMinute } from "date-fns";
 import PropTypes from "prop-types";
 import * as d3 from "d3";
 
+import getTimeScale from "./getTimeScale";
+import { timeline } from "ui/constants";
+
 import { DeleteClockButton } from "./DeleteClockButton";
+import { DatePicker } from "./DatePicker";
 
 export class Clock extends React.Component {
-  componentDidMount() {
-    const domain = [addDays(this.props.time, -2), addDays(this.props.time, 2)];
-    const timeScale = getTimeScale(domain);
+  state = {
+    isPickDateMode: false
+  };
 
-    timeScale.ticks(d3.timeHour.every(6)); // d3.timeHour.every(5) doesn't work
-    const xAxis = d3.axisBottom(timeScale).tickSizeOuter(0);
+  componentDidMount() {
+    const timeScale = getTimeScale(this.props.time);
+
+    const xAxis = d3
+      .axisBottom(timeScale)
+      .ticks(d3.timeDay.every(1))
+      .tickSizeOuter(0);
 
     const svg = d3
       .select(this.clockRef)
       .append("svg")
-      .attr("width", window.innerWidth * 3)
+      .attr("width", window.innerWidth * timeline.width)
       .attr("height", 50);
     svg
       .append("g")
@@ -73,13 +76,6 @@ function roundToNearestMinutes(date, interval) {
 
 function getScrolledTime(time, shift) {
   return new Date(Number(time) + shift);
-}
-
-export function getTimeScale(domain) {
-  return d3
-    .scaleTime()
-    .domain(domain)
-    .range([0, window.innerWidth * 3]);
 }
 
 // choose more contrast color

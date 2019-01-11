@@ -45,6 +45,10 @@ class App extends Component {
     this.clockList.scrollToNow();
   }
 
+  setShift(time) {
+    this.clockList.scrollTo(time);
+  }
+
   toggleEditMode() {
     this.setState({ isEditMode: !this.state.isEditMode });
     this.resetShift();
