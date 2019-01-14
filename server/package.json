@@ -1,15 +1,11 @@
 {
-  "name": "global-clock",
+  "name": "server",
   "version": "0.0.1",
   "private": true,
   "description": "",
   "main": "index.js",
-  "workspaces": [
-    "client"
-  ],
   "scripts": {
-    "start": "nodemon .",
-    "deploy": "now"
+    "start": "nodemon ."
   },
   "dependencies": {
     "body-parser": "^1.18.3",

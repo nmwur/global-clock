@@ -10,7 +10,7 @@
       }
     },
     {
-      "src": "index.js",
+      "src": "server/index.js",
       "use": "@now/node-server"
     }
   ],
@@ -48,13 +48,14 @@
     },
     {
       "src": "/(.*)",
-      "dest": "index.js"
+      "dest": "/server/index.js"
     }
   ],
   "env": {
     "NODE_ENV": "production",
-    "DB_HOST": "@db_host",
-    "DB_USER": "@db_user",
-    "DB_PASS": "@db_pass"
+    "DB_HOST": "@db-host",
+    "DB_USER": "@db-user",
+    "DB_PASS": "@db-pass",
+    "GOOGLE_CLIENT_ID": "@google-client-id"
   }
 }
