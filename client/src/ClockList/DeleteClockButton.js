@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 const DeleteClockButton = ({ onClick, className }) => (
   <div onClick={onClick} className={className}>
-    delete
+    [delete]
   </div>
 );
 DeleteClockButton.propTypes = {

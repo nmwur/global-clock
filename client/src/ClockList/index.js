@@ -38,6 +38,9 @@ export class ClockList extends React.Component {
             city={`Local time`}
             time={this.state.time}
             shift={this.state.shift}
+            timezone={getTimezone(this.state.time)}
+            isEditMode={this.props.isEditMode}
+            pickTime={this.pickTime.bind(this)}
           />
           {this.props.clockList.map(clock => (
             <Clock
@@ -62,7 +65,7 @@ export class ClockList extends React.Component {
             />
           )}
         </StyledClockList>
-        <Scrubber />
+        {!this.props.isEditMode && <Scrubber />}
       </ScrollWrapper>
     );
   }
@@ -126,17 +129,21 @@ ClockList.propTypes = {
   isEditMode: PropTypes.bool.isRequired
 };
 
+function getTimezone(time) {
+  return -time.getTimezoneOffset();
+}
+
 function getRemoteTime(localTime, timezone) {
-  const localTimezone = localTime.getTimezoneOffset();
-  const remoteTimezone = -timezone;
-  const timezoneDifference = localTimezone - remoteTimezone;
+  const localTimezone = getTimezone(localTime);
+  const remoteTimezone = timezone;
+  const timezoneDifference = remoteTimezone - localTimezone;
   return addMinutes(localTime, timezoneDifference);
 }
 
 function getLocalTime(remoteTime, timezone) {
-  const localTimezone = new Date().getTimezoneOffset();
-  const remoteTimezone = -timezone;
-  const timezoneDifference = localTimezone - remoteTimezone;
+  const localTimezone = getTimezone(new Date());
+  const remoteTimezone = timezone;
+  const timezoneDifference = remoteTimezone - localTimezone;
   return addMinutes(remoteTime, -timezoneDifference);
 }
 
@@ -156,7 +163,7 @@ const Scrubber = styled.div`
   z-index: 1;
   width: 1px;
   height: 100%;
-  border-left: 2px dashed #ffb432;
+  border-left: 2px dashed #ed957b;
 `;
 
 const StyledClockList = styled.div`

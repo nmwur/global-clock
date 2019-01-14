@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 const AddClockButton = ({ onClick, className }) => (
   <button onClick={onClick} className={className}>
-    add clock
+    [add clock]
   </button>
 );
 AddClockButton.propTypes = {

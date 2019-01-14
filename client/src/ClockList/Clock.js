@@ -16,11 +16,21 @@ export class Clock extends React.Component {
   };
 
   componentDidMount() {
-    this.drawTimeChart();
+    if (!this.props.isEditMode) {
+      this.drawTimeChart();
+    }
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.time.getTime() !== this.props.time.getTime()) {
+    if (
+      prevProps.time.getTime() !== this.props.time.getTime() &&
+      !this.props.isEditMode
+    ) {
+      this.clearTimeChart();
+      this.drawTimeChart();
+    } else if (!prevProps.isEditMode && this.props.isEditMode) {
+      this.clearTimeChart();
+    } else if (prevProps.isEditMode && !this.props.isEditMode) {
       this.drawTimeChart();
     }
   }
@@ -35,12 +45,24 @@ export class Clock extends React.Component {
 
     const formattedTime = format(roundedTime, "hh:mm A");
 
+    const timezoneInHours = `${this.props.timezone > 0 ? "+" : ""}${this.props
+      .timezone / 60}`;
+
     return (
       <StyledClock ref={el => (this.clockRef = el)}>
-        <City>{this.props.city}</City>
-        <Time>{formattedTime}</Time>
+        <City>
+          {this.props.city}
+          {this.props.isEditMode && ` (${timezoneInHours})`}
+        </City>
+        {!this.props.isEditMode && <Time>{formattedTime}</Time>}
 
-        <div onClick={this.togglePickDateMode.bind(this)}>pick date</div>
+        {!this.props.isEditMode && (
+          <PickDateButton onClick={this.togglePickDateMode.bind(this)}>
+            <span role="img" aria-label="pick date">
+              📅
+            </span>
+          </PickDateButton>
+        )}
 
         {this.props.isEditMode && (
           <DeleteClockButton onClick={this.deleteClockHandler.bind(this)} />
@@ -64,10 +86,6 @@ export class Clock extends React.Component {
       .ticks(d3.timeDay.every(1))
       .tickSizeOuter(0);
 
-    d3.select(this.clockRef)
-      .selectAll("svg")
-      .remove();
-
     const svg = d3
       .select(this.clockRef)
       .append("svg")
@@ -79,6 +97,12 @@ export class Clock extends React.Component {
       .call(xAxis)
       .style("transform", "translateY(25px)")
       .style("color", "#737dc3");
+  }
+
+  clearTimeChart() {
+    d3.select(this.clockRef)
+      .selectAll("svg")
+      .remove();
   }
 
   deleteClockHandler() {
@@ -111,11 +135,10 @@ function getScrolledTime(time, shift) {
   return new Date(Number(time) + shift);
 }
 
-// choose more contrast color
 const Time = styled.div`
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
-  color: #ffb432;
+  color: #ed957b;
   font-family: monospace;
   display: inline-flex;
   justify-content: space-between;
@@ -133,9 +156,22 @@ const City = styled.div`
   pointer-events: none;
 `;
 
-// show borders and timezone on edit; hide timeline on edit
+const PickDateButton = styled.div`
+  opacity: 0;
+  position: absolute;
+  right: 5px;
+  cursor: pointer;
+  pointer-events: none;
+  transition: opacity 0.2s;
+`;
+
 const StyledClock = styled.div`
-  min-height: 25px;
-  margin-bottom: 50px;
+  height: 50px;
+  margin-bottom: 25px;
   width: 100%;
+
+  &:hover ${PickDateButton} {
+    opacity: 1;
+    pointer-events: auto;
+  }
 `;
