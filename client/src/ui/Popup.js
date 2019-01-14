@@ -37,9 +37,8 @@ const Background = styled.div`
 `;
 
 const StyledPopup = styled(Popup)`
-  width: 80%;
-  max-width: 400px;
-  max-height: 70%;
+  max-width: 90%;
+  max-height: 80%;
   background-color: white;
   overflow-y: auto;
 `;

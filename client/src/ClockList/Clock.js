@@ -8,7 +8,7 @@ import getTimeScale from "./getTimeScale";
 import { timeline } from "ui/constants";
 
 import { DeleteClockButton } from "./DeleteClockButton";
-import { DatePicker } from "./DatePicker";
+import { TimePicker } from "./TimePicker";
 
 export class Clock extends React.Component {
   state = {
@@ -49,8 +49,18 @@ export class Clock extends React.Component {
       <StyledClock ref={el => (this.clockRef = el)}>
         <City>{this.props.city}</City>
         <Time>{formattedTime}</Time>
+
+        <div onClick={this.togglePickDateMode.bind(this)}>pick date</div>
+
         {this.props.isEditMode && (
           <DeleteClockButton onClick={this.deleteClockHandler.bind(this)} />
+        )}
+
+        {this.state.isPickDateMode && (
+          <TimePicker
+            onSubmit={this.pickTime.bind(this)}
+            closePopup={this.togglePickDateMode.bind(this)}
+          />
         )}
       </StyledClock>
     );
@@ -58,6 +68,14 @@ export class Clock extends React.Component {
 
   deleteClockHandler() {
     this.props.deleteClock(this.props.id);
+  }
+
+  togglePickDateMode() {
+    this.setState({ isPickDateMode: !this.state.isPickDateMode });
+  }
+
+  pickTime(time) {
+    this.props.pickTime(time, this.props.timezone);
   }
 }
 Clock.propTypes = {

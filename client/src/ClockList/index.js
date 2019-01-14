@@ -11,12 +11,6 @@ import { AddClockButton } from "./AddClockButton";
 import { AddClockForm } from "./AddClockForm";
 
 export class ClockList extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.timeScale = getTimeScale(new Date());
-  }
-
   state = {
     time: new Date(),
     shift: 0,
@@ -54,6 +48,7 @@ export class ClockList extends React.Component {
               timezone={clock.timezone}
               isEditMode={this.props.isEditMode}
               deleteClock={this.props.deleteClock.bind(this)}
+              pickTime={this.pickTime.bind(this)}
               key={clock.id}
             />
           ))}
@@ -72,9 +67,18 @@ export class ClockList extends React.Component {
     );
   }
 
-  scrollTo(time) {
-    this.setState({ time });
+  async readyTimeScrolling(time) {
+    await this.setState({ time });
+    this.timeScale = getTimeScale(this.state.time);
+  }
 
+  async pickTime(remoteTime, timezone) {
+    const time = getLocalTime(remoteTime, timezone);
+    await this.readyTimeScrolling(time);
+    this.scrollTo(this.state.time);
+  }
+
+  scrollTo(time) {
     const scaledTime = this.timeScale(time);
     const halfScreenOffset = this.scrollWrapper.clientWidth / 2;
     this.scrollWrapper.scrollLeft = scaledTime - halfScreenOffset;
@@ -82,6 +86,7 @@ export class ClockList extends React.Component {
 
   async scrollToNow() {
     await this.setState({ isShiftBeingReset: true });
+    await this.readyTimeScrolling(new Date());
     this.scrollTo(new Date());
   }
 
@@ -121,12 +126,16 @@ ClockList.propTypes = {
 
 function getRemoteTime(localTime, timezone) {
   const localTimezone = localTime.getTimezoneOffset();
-
   const remoteTimezone = -timezone;
-
   const timezoneDifference = localTimezone - remoteTimezone;
-
   return addMinutes(localTime, timezoneDifference);
+}
+
+function getLocalTime(remoteTime, timezone) {
+  const localTimezone = new Date().getTimezoneOffset();
+  const remoteTimezone = -timezone;
+  const timezoneDifference = localTimezone - remoteTimezone;
+  return addMinutes(remoteTime, -timezoneDifference);
 }
 
 function getShift(time, scrolledTime) {
