@@ -12,7 +12,7 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const routes = require("./routes");
 
-const client = new OAuth2Client(process.env.CLIENT_ID);
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const app = express();
 
@@ -59,7 +59,7 @@ app.get("/", (req, res) => {
 async function verifyToken(idToken) {
   const ticket = await client.verifyIdToken({
     idToken,
-    audience: process.env.CLIENT_ID
+    audience: process.env.GOOGLE_CLIENT_ID
   });
 
   return ticket.getPayload();
