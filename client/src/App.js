@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import uniqid from "uniqid";
 
 import { ClockList } from "./ClockList";
 import { ControlPanel } from "./ControlPanel";
@@ -71,14 +72,6 @@ class App extends Component {
     }
   }
 
-  checkIfSignedIn(statusCode) {
-    return statusCode === 204
-      ? false
-      : statusCode === 200
-      ? true
-      : this.state.isLoggedIn;
-  }
-
   async addClock(city, timezone) {
     const response = await fetch(
       `${BACKEND_PATH}?city=${city}&timezone=${timezone}`,
@@ -86,10 +79,23 @@ class App extends Component {
         method: "POST"
       }
     );
-    const addedClock = await response.json();
 
-    const clockList = [...this.state.clockList, addedClock];
-    this.setState({ clockList });
+    const isLoggedIn = this.checkIfSignedIn(response.status);
+    if (isLoggedIn) {
+      const addedClock = await response.json();
+      const clockList = [...this.state.clockList, addedClock];
+      this.setState({ clockList });
+    } else {
+      const clockList = [
+        ...this.state.clockList,
+        {
+          id: uniqid(),
+          city,
+          timezone
+        }
+      ];
+      this.setState({ clockList });
+    }
   }
 
   deleteClock(id) {
@@ -97,6 +103,14 @@ class App extends Component {
 
     const clockList = this.state.clockList.filter(clock => clock.id !== id);
     this.setState({ clockList });
+  }
+
+  checkIfSignedIn(statusCode) {
+    return statusCode === 204
+      ? false
+      : statusCode === 200
+        ? true
+        : this.state.isLoggedIn;
   }
 }
 
