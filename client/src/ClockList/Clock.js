@@ -16,23 +16,13 @@ export class Clock extends React.Component {
   };
 
   componentDidMount() {
-    const timeScale = getTimeScale(this.props.time);
+    this.drawTimeChart();
+  }
 
-    const xAxis = d3
-      .axisBottom(timeScale)
-      .ticks(d3.timeDay.every(1))
-      .tickSizeOuter(0);
-
-    const svg = d3
-      .select(this.clockRef)
-      .append("svg")
-      .attr("width", window.innerWidth * timeline.width)
-      .attr("height", 50);
-    svg
-      .append("g")
-      .call(xAxis)
-      .style("transform", "translateY(25px)")
-      .style("color", "#737dc3");
+  componentDidUpdate(prevProps) {
+    if (prevProps.time.getTime() !== this.props.time.getTime()) {
+      this.drawTimeChart();
+    }
   }
 
   render() {
@@ -64,6 +54,31 @@ export class Clock extends React.Component {
         )}
       </StyledClock>
     );
+  }
+
+  drawTimeChart() {
+    const timeScale = getTimeScale(this.props.time);
+
+    const xAxis = d3
+      .axisBottom(timeScale)
+      .ticks(d3.timeDay.every(1))
+      .tickSizeOuter(0);
+
+    d3.select(this.clockRef)
+      .selectAll("svg")
+      .remove();
+
+    const svg = d3
+      .select(this.clockRef)
+      .append("svg")
+      .attr("width", window.innerWidth * timeline.width)
+      .attr("height", 50);
+
+    svg
+      .append("g")
+      .call(xAxis)
+      .style("transform", "translateY(25px)")
+      .style("color", "#737dc3");
   }
 
   deleteClockHandler() {

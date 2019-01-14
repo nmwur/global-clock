@@ -67,18 +67,14 @@ export class ClockList extends React.Component {
     );
   }
 
-  async readyTimeScrolling(time) {
-    await this.setState({ time });
-    this.timeScale = getTimeScale(this.state.time);
-  }
-
-  async pickTime(remoteTime, timezone) {
+  pickTime(remoteTime, timezone) {
     const time = getLocalTime(remoteTime, timezone);
-    await this.readyTimeScrolling(time);
-    this.scrollTo(this.state.time);
+    this.scrollTo(time);
   }
 
   scrollTo(time) {
+    this.setState({ time });
+    this.timeScale = getTimeScale(time);
     const scaledTime = this.timeScale(time);
     const halfScreenOffset = this.scrollWrapper.clientWidth / 2;
     this.scrollWrapper.scrollLeft = scaledTime - halfScreenOffset;
@@ -86,12 +82,11 @@ export class ClockList extends React.Component {
 
   async scrollToNow() {
     await this.setState({ isShiftBeingReset: true });
-    await this.readyTimeScrolling(new Date());
     this.scrollTo(new Date());
   }
 
   onScroll() {
-    const { scrollLeft, clientWidth } = this.scrollWrapper;
+    const { scrollLeft, clientWidth, scrollWidth } = this.scrollWrapper;
     const scrolledPosition = scrollLeft + clientWidth / 2;
 
     const scrolledTime = this.timeScale.invert(scrolledPosition);
@@ -102,6 +97,13 @@ export class ClockList extends React.Component {
       shift: this.state.isShiftBeingReset ? 0 : shift,
       isShiftBeingReset: false
     });
+
+    const isScrolledToEarliest = scrollLeft === 0;
+    const isScrolledToLatest = scrollLeft + clientWidth === scrollWidth;
+    if (isScrolledToEarliest || isScrolledToLatest) {
+      const scrolledTime = this.timeScale.invert(scrolledPosition);
+      this.scrollTo(scrolledTime);
+    }
   }
 
   openAddClockForm() {
