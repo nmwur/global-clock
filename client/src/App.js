@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import uniqid from "uniqid";
 
 import { ClockList } from "./ClockList";
 import { ControlPanel } from "./ControlPanel";
@@ -80,19 +79,16 @@ class App extends Component {
       : this.state.isLoggedIn;
   }
 
-  addClock(city, timezone) {
-    fetch(`${BACKEND_PATH}?city=${city}&timezone=${timezone}`, {
-      method: "POST"
-    });
-
-    const clockList = [
-      ...this.state.clockList,
+  async addClock(city, timezone) {
+    const response = await fetch(
+      `${BACKEND_PATH}?city=${city}&timezone=${timezone}`,
       {
-        id: uniqid(),
-        city,
-        timezone
+        method: "POST"
       }
-    ];
+    );
+    const addedClock = await response.json();
+
+    const clockList = [...this.state.clockList, addedClock];
     this.setState({ clockList });
   }
 
