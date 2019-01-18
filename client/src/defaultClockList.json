@@ -2,16 +2,16 @@
   {
     "id": "b",
     "city": "Bristol",
-    "timezone": 0
+    "timezone": "Europe/London"
   },
   {
     "id": "s",
     "city": "Singapore",
-    "timezone": 480
+    "timezone": "Asia/Singapore"
   },
   {
     "id": "v",
     "city": "Vancouver",
-    "timezone": -480
+    "timezone": "America/Vancouver"
   }
 ]

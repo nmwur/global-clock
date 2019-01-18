@@ -33,7 +33,7 @@ mongoose.connect(
   }
 );
 const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
+db.on("error", () => console.error("connection error:"));
 
 app.use(
   session({
@@ -88,8 +88,7 @@ app.get("/userpicurl", (req, res) => {
 });
 
 app.use((err, req, res) => {
-  res.status(err.status || 500);
-  res.json({
+  res.status(err.status || 500).json({
     error: {
       message: err.message
     }

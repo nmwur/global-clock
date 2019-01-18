@@ -45,8 +45,8 @@ export class Clock extends React.Component {
 
     const formattedTime = format(roundedTime, "hh:mm A");
 
-    const timezoneInHours = `${this.props.timezone > 0 ? "+" : ""}${this.props
-      .timezone / 60}`;
+    const timezoneInHours = `${this.props.timezoneOffset > 0 ? "+" : ""}${this
+      .props.timezoneOffset / 60}`;
 
     return (
       <StyledClock ref={el => (this.clockRef = el)}>
@@ -114,14 +114,14 @@ export class Clock extends React.Component {
   }
 
   pickTime(time) {
-    this.props.pickTime(time, this.props.timezone);
+    this.props.pickTime(time, this.props.timezoneOffset);
   }
 }
 Clock.propTypes = {
   city: PropTypes.string.isRequired,
   time: PropTypes.instanceOf(Date).isRequired,
   shift: PropTypes.number.isRequired,
-  timezone: PropTypes.number,
+  timezoneOffset: PropTypes.number.isRequired,
   isisEditMode: PropTypes.bool,
   deleteClock: PropTypes.func
 };

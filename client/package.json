@@ -54,6 +54,7 @@
     "style-loader": "0.23.0",
     "styled-components": "^4.1.1",
     "terser-webpack-plugin": "1.1.0",
+    "timezone-support": "^1.8.1",
     "uniqid": "^5.0.3",
     "url-loader": "1.1.1",
     "webpack": "4.19.1",

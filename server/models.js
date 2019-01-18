@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 const ClockSchema = new Schema(
   {
     city: String,
-    timezone: Number,
+    timezone: String,
     order: Number,
     userId: String
   },

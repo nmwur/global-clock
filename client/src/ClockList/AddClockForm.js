@@ -32,8 +32,7 @@ export class AddClockForm extends React.Component {
   }
 
   handleSubmit(event) {
-    const timezoneInMinutes = Number(this.timezone.value) * 60;
-    this.props.onSubmit(this.city.value, timezoneInMinutes);
+    this.props.onSubmit(this.city.value, this.timezone.value);
     this.props.closeForm();
     event.preventDefault();
   }

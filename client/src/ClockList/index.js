@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { addMinutes } from "date-fns";
+import { findTimeZone, getZonedTime } from "timezone-support";
 
 import getTimeScale from "./getTimeScale";
 import { timeline } from "ui/constants";
@@ -39,7 +40,7 @@ export class ClockList extends React.Component {
             city={`Local time`}
             time={this.state.time}
             shift={this.state.shift}
-            timezone={getTimezone(this.state.time)}
+            timezoneOffset={getTimezoneOffset(this.state.time)}
             isEditMode={this.props.isEditMode}
             pickTime={this.pickTime.bind(this)}
           />
@@ -49,7 +50,10 @@ export class ClockList extends React.Component {
               city={clock.city}
               time={getRemoteTime(this.state.time, clock.timezone)}
               shift={this.state.shift}
-              timezone={clock.timezone}
+              timezoneOffset={getRemoteTimezoneOffset(
+                this.state.time,
+                clock.timezone
+              )}
               isEditMode={this.props.isEditMode}
               deleteClock={this.props.deleteClock.bind(this)}
               pickTime={this.pickTime.bind(this)}
@@ -71,8 +75,8 @@ export class ClockList extends React.Component {
     );
   }
 
-  pickTime(remoteTime, timezone) {
-    const localTime = getLocalTime(remoteTime, timezone);
+  pickTime(remoteTime, remoteTimezoneOffset) {
+    const localTime = getLocalTime(remoteTime, remoteTimezoneOffset);
     this.scrollTo(localTime);
   }
 
@@ -121,29 +125,43 @@ ClockList.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       city: PropTypes.string.isRequired,
-      timezone: PropTypes.number.isRequired
+      timezone: PropTypes.string.isRequired
     })
   ).isRequired,
   deleteClock: PropTypes.func,
   isEditMode: PropTypes.bool.isRequired
 };
 
-function getTimezone(time) {
+function getTimezoneOffset(time) {
   return -time.getTimezoneOffset();
 }
 
 function getRemoteTime(localTime, timezone) {
-  const localTimezone = getTimezone(localTime);
-  const remoteTimezone = timezone;
-  const timezoneDifference = remoteTimezone - localTimezone;
-  return addMinutes(localTime, timezoneDifference);
+  const timezoneObj = findTimeZone(timezone);
+  const zonedTimeObj = getZonedTime(localTime, timezoneObj);
+
+  return new Date(
+    zonedTimeObj.year,
+    zonedTimeObj.month - 1,
+    zonedTimeObj.day,
+    zonedTimeObj.hours,
+    zonedTimeObj.minutes,
+    zonedTimeObj.seconds,
+    zonedTimeObj.milliseconds
+  );
 }
 
-function getLocalTime(remoteTime, timezone) {
-  const localTimezone = getTimezone(new Date());
-  const remoteTimezone = timezone;
-  const timezoneDifference = remoteTimezone - localTimezone;
-  return addMinutes(remoteTime, -timezoneDifference);
+function getRemoteTimezoneOffset(localTime, timezone) {
+  const timezoneObj = findTimeZone(timezone);
+  const zonedTimeObj = getZonedTime(localTime, timezoneObj);
+
+  return -zonedTimeObj.zone.offset;
+}
+
+function getLocalTime(remoteTime, remoteTimezoneOffset) {
+  const localTimezoneOffset = getTimezoneOffset(remoteTime);
+  const timezoneOffsetDifference = remoteTimezoneOffset - localTimezoneOffset;
+  return addMinutes(remoteTime, -timezoneOffsetDifference);
 }
 
 function getShift(time, scrolledTime) {
