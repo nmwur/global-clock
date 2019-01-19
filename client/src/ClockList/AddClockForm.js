@@ -41,25 +41,18 @@ export class AddClockForm extends React.Component {
                     placeholder: "Search cities ..."
                   })}
                 />
-                <div className="autocomplete-dropdown-container">
+                <div>
                   {loading && <div>Loading...</div>}
                   {suggestions.map(suggestion => {
-                    const className = suggestion.active
-                      ? "suggestion-item--active"
-                      : "suggestion-item";
-                    // inline style for demonstration purpose
                     const style = suggestion.active
                       ? { backgroundColor: "#fafafa", cursor: "pointer" }
                       : { backgroundColor: "#ffffff", cursor: "pointer" };
                     return (
-                      <div
-                        {...getSuggestionItemProps(suggestion, {
-                          className,
-                          style
-                        })}
+                      <Suggestion
+                        {...getSuggestionItemProps(suggestion, { style })}
                       >
                         <span>{suggestion.description}</span>
-                      </div>
+                      </Suggestion>
                     );
                   })}
                 </div>
@@ -119,6 +112,11 @@ const TextInput = styled.input`
   font-size: 20px;
   width: 100%;
   box-sizing: border-box;
+  margin-bottom: 10px;
+`;
+
+const Suggestion = styled.div`
+  padding: 5px;
 `;
 
 const StyledAddClockForm = styled.div`

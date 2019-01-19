@@ -103,7 +103,8 @@ export class Clock extends React.Component {
       .style("transform", "translateY(25px)")
       .style("color", colors.text)
       .style("font-size", "12px")
-      .style("font-family", "monospace");
+      .style("font-family", "monospace")
+      .style("user-select", "none");
   }
 
   clearTimeChart() {
