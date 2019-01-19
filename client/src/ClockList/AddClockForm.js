@@ -83,7 +83,6 @@ export class AddClockForm extends React.Component {
     geocodeByAddress(address)
       .then(results => {
         city = results[0].address_components[0].long_name;
-        this.setState({ city });
 
         return getLatLng(results[0]);
       })

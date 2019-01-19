@@ -23,10 +23,12 @@ export class ClockList extends React.Component {
   componentDidMount() {
     this.props.onRef(this);
     this.scrollToNow();
+    window.addEventListener("resize", this.onWindowResize.bind(this));
   }
 
   componentWillUnmount() {
     this.props.onRef(undefined);
+    window.removeEventListener("resize", this.onWindowResize.bind(this));
   }
 
   render() {
@@ -110,6 +112,10 @@ export class ClockList extends React.Component {
     if (isScrolledToEarliest || isScrolledToLatest) {
       this.scrollTo(scrolledTime);
     }
+  }
+
+  onWindowResize() {
+    this.scrollTo(this.state.time);
   }
 
   openAddClockForm() {

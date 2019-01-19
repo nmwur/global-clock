@@ -19,6 +19,7 @@ export class Clock extends React.Component {
     if (!this.props.isEditMode) {
       this.drawTimeChart();
     }
+    window.addEventListener("resize", this.onWindowResize.bind(this));
   }
 
   componentDidUpdate(prevProps) {
@@ -33,6 +34,10 @@ export class Clock extends React.Component {
     } else if (prevProps.isEditMode && !this.props.isEditMode) {
       this.drawTimeChart();
     }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.onWindowResize.bind(this));
   }
 
   render() {
@@ -115,6 +120,11 @@ export class Clock extends React.Component {
 
   pickTime(time) {
     this.props.pickTime(time, this.props.timezoneOffset);
+  }
+
+  onWindowResize() {
+    this.clearTimeChart();
+    this.drawTimeChart();
   }
 }
 Clock.propTypes = {
