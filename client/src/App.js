@@ -12,7 +12,7 @@ class App extends Component {
   state = {
     isEditMode: false,
     isLoggedIn: false,
-    clockList: defaultClockList,
+    clockList: [],
     isDefaultClockListModified: false
   };
 
