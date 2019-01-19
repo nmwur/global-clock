@@ -63,7 +63,7 @@ export class UserLogin extends React.Component {
   }
 
   async createSession(idToken) {
-    const response = await fetch("/tokensignin", {
+    const response = await fetch("/auth/tokensignin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ idToken })

@@ -1,26 +1,25 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable consistent-return */
-const { Router } = require('express');
+const { Router } = require("express");
 
-const router = Router();
+const clocks = Router();
 
-const { Clock } = require('./models');
+const { Clock } = require("../models");
 
-router.use((req, res, next) => {
+clocks.use((req, res, next) => {
   if (!req.session.userId) {
     res.status(204).end();
-  }
-  else {
+  } else {
     next();
   }
 });
 
-router.param('id', (req, res, next, id) => {
+clocks.param("id", (req, res, next, id) => {
   Clock.findById(id, (err, doc) => {
     if (err) return next(err);
 
     if (!doc) {
-      const notFoundErr = new Error('Not found');
+      const notFoundErr = new Error("Not found");
       notFoundErr.status = 404;
       return next(notFoundErr);
     }
@@ -30,7 +29,7 @@ router.param('id', (req, res, next, id) => {
   });
 });
 
-router.get('/', (req, res, next) => {
+clocks.get("/", (req, res, next) => {
   Clock.find({ userId: req.session.userId }, (err, clocks) => {
     if (err) return next(err);
 
@@ -38,7 +37,7 @@ router.get('/', (req, res, next) => {
   });
 });
 
-router.post('/', (req, res, next) => {
+clocks.post("/", (req, res, next) => {
   const clock = new Clock({
     city: req.query.city,
     timezone: req.query.timezone,
@@ -53,13 +52,13 @@ router.post('/', (req, res, next) => {
   });
 });
 
-router.delete('/:id', (req, res, next) => {
-  req.clock.remove((err) => {
+clocks.delete("/:id", (req, res, next) => {
+  req.clock.remove(err => {
     if (err) return next(err);
 
     res.status(204);
-    res.send('OK');
+    res.send("OK");
   });
 });
 
-module.exports = router;
+module.exports = clocks;

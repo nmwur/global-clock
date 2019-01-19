@@ -52,7 +52,7 @@ export class ControlPanel extends React.Component {
 
   async componentDidUpdate(prevProps) {
     if (!prevProps.isLoggedIn && this.props.isLoggedIn) {
-      const response = await fetch("/userpicurl");
+      const response = await fetch("/auth/userpicurl");
       const userPicUrl = await response.text();
       this.setState({ userPicUrl });
     } else if (prevProps.isLoggedIn && !this.props.isLoggedIn) {

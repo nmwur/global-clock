@@ -53,7 +53,7 @@ export class UserLogout extends React.Component {
 
   async onSuccess(googleUser) {
     this.props.closeUserPopup();
-    fetch("/tokensignout").then(response => {
+    fetch("/auth/tokensignout").then(response => {
       if (response.ok) {
         this.props.updateClockList();
       }
