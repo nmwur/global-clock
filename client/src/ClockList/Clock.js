@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import * as d3 from "d3";
 
 import getTimeScale from "./getTimeScale";
-import { timeline } from "ui/constants";
+import { timeline, colors } from "ui/constants";
 
 import { DeleteClockButton } from "./DeleteClockButton";
 import { TimePicker } from "./TimePicker";
@@ -101,7 +101,7 @@ export class Clock extends React.Component {
       .append("g")
       .call(xAxis)
       .style("transform", "translateY(25px)")
-      .style("color", "#737dc3");
+      .style("color", colors.text);
   }
 
   clearTimeChart() {
@@ -148,7 +148,7 @@ function getScrolledTime(time, shift) {
 const Time = styled.div`
   font-size: 20px;
   font-weight: 600;
-  color: #ed957b;
+  color: ${colors.scrubber};
   font-family: monospace;
   display: inline-flex;
   justify-content: space-between;
@@ -162,7 +162,7 @@ const City = styled.div`
   left: 5px;
   font-family: monospace;
   font-size: 18px;
-  color: #737dc3;
+  color: ${colors.text};
   pointer-events: none;
 `;
 

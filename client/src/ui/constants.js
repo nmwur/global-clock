@@ -1,5 +1,11 @@
+const hue = Math.random() * 255;
+
 module.exports = {
-  colors: {},
+  colors: {
+    bg: `hsl(${hue}, 30%, 80%)`,
+    text: `hsl(${hue}, 20%, 40%)`,
+    scrubber: `white`
+  },
   timeline: {
     width: 30,
     days: 40

@@ -5,6 +5,7 @@ import uniqid from "uniqid";
 import { ClockList } from "./ClockList";
 import { ControlPanel } from "./ControlPanel";
 import defaultClockList from "./defaultClockList.json";
+import { colors } from "ui/constants";
 
 const BACKEND_PATH = "/clocks";
 
@@ -116,7 +117,7 @@ class App extends Component {
 
 const StyledApp = styled.div`
   position: relative;
-  background-color: #cddcf0;
+  background-color: ${colors.bg};
   font-family: monospace;
 `;
 

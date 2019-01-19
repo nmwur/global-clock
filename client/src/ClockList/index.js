@@ -5,7 +5,7 @@ import { addMinutes } from "date-fns";
 import { findTimeZone, getZonedTime } from "timezone-support";
 
 import getTimeScale from "./getTimeScale";
-import { timeline } from "ui/constants";
+import { timeline, colors } from "ui/constants";
 
 import { Clock } from "./Clock";
 import { AddClockButton } from "./AddClockButton";
@@ -186,7 +186,7 @@ const Scrubber = styled.div`
   z-index: 1;
   width: 1px;
   height: 100%;
-  border-left: 2px dashed #ed957b;
+  border-left: 2px dashed ${colors.scrubber};
 `;
 
 const StyledClockList = styled.div`
