@@ -101,7 +101,9 @@ export class Clock extends React.Component {
       .append("g")
       .call(xAxis)
       .style("transform", "translateY(25px)")
-      .style("color", colors.text);
+      .style("color", colors.text)
+      .style("font-size", "12px")
+      .style("font-family", "monospace");
   }
 
   clearTimeChart() {
@@ -150,7 +152,7 @@ function getScrolledTime(time, shift) {
 const Time = styled.div`
   font-size: 20px;
   font-weight: 600;
-  color: ${colors.scrubber};
+  color: rgba(255, 255, 255, 80%);
   font-family: monospace;
   display: inline-flex;
   justify-content: space-between;
