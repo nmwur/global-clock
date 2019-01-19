@@ -124,7 +124,9 @@ export class Clock extends React.Component {
 
   onWindowResize() {
     this.clearTimeChart();
-    this.drawTimeChart();
+    if (!this.props.isEditMode) {
+      this.drawTimeChart();
+    }
   }
 }
 Clock.propTypes = {
