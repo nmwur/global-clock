@@ -22,7 +22,6 @@ export class AddClockForm extends React.Component {
     return (
       <Popup onClose={this.props.closeForm}>
         <StyledAddClockForm>
-          <Label>City:</Label>
           <PlacesAutocomplete
             value={this.state.city}
             onChange={this.handleChange.bind(this)}
@@ -36,10 +35,10 @@ export class AddClockForm extends React.Component {
               loading
             }) => (
               <div>
-                <input
+                <TextInput
                   ref={el => (this.city = el)}
                   {...getInputProps({
-                    placeholder: "Search Places ..."
+                    placeholder: "Search cities ..."
                   })}
                 />
                 <div className="autocomplete-dropdown-container">
@@ -115,22 +114,18 @@ AddClockForm.propTypes = {
   closeForm: PropTypes.func.isRequired
 };
 
-const Label = styled.div`
-  color: #555;
-  margin-bottom: 5px;
+const TextInput = styled.input`
+  display: block;
+  font-size: 20px;
+  width: 100%;
+  box-sizing: border-box;
 `;
-
-// const TextInput = styled.input`
-//   display: block;
-//   font-size: 25px;
-//   width: 100%;
-//   box-sizing: border-box;
-// `;
 
 const StyledAddClockForm = styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px;
+  min-width: 240px;
 
   .search-input {
     width: 100%;

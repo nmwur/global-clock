@@ -150,14 +150,15 @@ function getScrolledTime(time, shift) {
 }
 
 const Time = styled.div`
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 800;
   color: rgba(255, 255, 255, 80%);
   font-family: monospace;
   display: inline-flex;
   justify-content: space-between;
   position: absolute;
   left: calc(50% + 5px);
+  transform: translateY(-2px);
   pointer-events: none;
 `;
 
