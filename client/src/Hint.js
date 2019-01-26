@@ -2,31 +2,18 @@ import React from "react";
 import styled from "styled-components";
 
 const Hint = ({ className }) => (
-  <div className={className}>
-    <span role="img" aria-label="left">
-      ⬅️
-    </span>
-    <Appeal>scroll</Appeal>
-    <span role="img" aria-label="right">
-      ➡️
-    </span>
-  </div>
+  <div className={className}>{"<< scroll >>"}</div>
 );
 
-const Appeal = styled.div`
-  margin-left: 20px;
-  margin-right: 20px;
-`;
-
 const StyledHint = styled(Hint)`
-  position: absolute;
-  left: 50%;
-  bottom: 100px;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
+  position: fixed;
+  width: 100%;
+  text-align: center;
+  bottom: 80px;
   pointer-events: none;
   font-size: 24px;
+  font-weight: 600;
+  color: white;
   animation-name: fade;
   animation-duration: 2s;
   opacity: 0;
@@ -34,19 +21,16 @@ const StyledHint = styled(Hint)`
   @keyframes fade {
     0% {
       opacity: 0;
-      transform: translateX(-50%);
     }
     40% {
-      opacity: 0.5;
-      transform: translateX(-50%);
+      opacity: 0.7;
     }
     60% {
-      opacity: 0.5;
-      transform: translateX(-50%);
+      opacity: 0.7;
     }
     100% {
       opacity: 0;
-      transform: translateX(-50%) scaleX(1.5);
+      transform: scaleX(1.3);
     }
   }
 `;
