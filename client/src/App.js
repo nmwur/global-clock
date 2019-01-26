@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import uniqid from "uniqid";
+import { isEmpty, isEqual } from "lodash";
 
 import { ClockList } from "./ClockList";
 import { ControlPanel } from "./ControlPanel";
+import { Hint } from "./Hint";
 import defaultClockList from "./defaultClockList.json";
 import { colors } from "ui/constants";
 
@@ -14,11 +16,22 @@ class App extends Component {
     isEditMode: false,
     isLoggedIn: false,
     clockList: [],
-    isDefaultClockListModified: false
+    isDefaultClockListModified: false,
+    isHintShown: false
   };
 
   componentDidMount() {
     this.updateClockList();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const isInitiallyLoggedOut =
+      isEmpty(prevState.clockList) &&
+      isEqual(this.state.clockList, defaultClockList);
+
+    if (isInitiallyLoggedOut) {
+      this.setState({ isHintShown: true });
+    }
   }
 
   render() {
@@ -38,6 +51,7 @@ class App extends Component {
           resetShift={this.resetShift.bind(this)}
           updateClockList={this.updateClockList.bind(this)}
         />
+        {this.state.isHintShown && <Hint />}
       </StyledApp>
     );
   }
