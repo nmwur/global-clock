@@ -83,6 +83,7 @@ const Button = styled.button`
   justify-content: center;
   margin: 2px;
   outline: none;
+  cursor: pointer;
 
   &:active {
     border-color: #f5af5f;

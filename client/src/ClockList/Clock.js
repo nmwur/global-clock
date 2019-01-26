@@ -75,6 +75,7 @@ export class Clock extends React.Component {
 
         {this.state.isPickDateMode && (
           <TimePicker
+            city={this.props.city}
             onSubmit={this.pickTime.bind(this)}
             closePopup={this.togglePickDateMode.bind(this)}
           />

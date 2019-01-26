@@ -13,6 +13,7 @@ export class TimePicker extends React.Component {
     return (
       <Popup onClose={this.props.closePopup}>
         <StyledTimePicker>
+          <City>{this.props.city}</City>
           <DateTime
             value={this.state.time}
             onChange={this.handleChange.bind(this)}
@@ -39,6 +40,7 @@ export class TimePicker extends React.Component {
   }
 }
 TimePicker.propTypes = {
+  city: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
   closePopup: PropTypes.func.isRequired
 };
@@ -60,6 +62,13 @@ const SubmitButton = styled.button`
     background-color: #ffe187;
     border-color: #f5af5f;
   }
+`;
+
+const City = styled.div`
+  font-size: 20px;
+  position: absolute;
+  transform: translateY(-100%);
+  color: white;
 `;
 
 const StyledTimePicker = styled.div`
