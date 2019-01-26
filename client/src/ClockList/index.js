@@ -188,6 +188,7 @@ const Scrubber = styled.div`
   height: 100%;
   border-left: 3px solid rgba(255, 255, 255, 40%);
   transform: translateX(-50%);
+  pointer-events: none;
 `;
 
 const StyledClockList = styled.div`
