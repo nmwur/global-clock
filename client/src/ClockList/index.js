@@ -15,9 +15,10 @@ export class ClockList extends React.Component {
   state = {
     time: new Date(),
     shift: 0,
+    timeScale: null,
+    isAddClockMode: false,
     isShiftBeingReset: false,
-    addClockMode: false,
-    timeScale: null
+    isScrollingToNeighborPeriod: false
   };
 
   componentDidMount() {
@@ -35,6 +36,7 @@ export class ClockList extends React.Component {
     return (
       <ScrollWrapper
         ref={el => (this.scrollWrapper = el)}
+        isScrollSmooth={!this.state.isScrollingToNeighborPeriod}
         onScroll={this.onScroll.bind(this)}
       >
         <StyledClockList ref={el => (this.clockList = el)}>
@@ -65,7 +67,7 @@ export class ClockList extends React.Component {
           {this.props.isEditMode && (
             <AddClockButton onClick={this.openAddClockForm.bind(this)} />
           )}
-          {this.state.addClockMode && (
+          {this.state.isAddClockMode && (
             <AddClockForm
               onSubmit={this.props.addClock.bind(this)}
               closeForm={this.closeAddClockForm.bind(this)}
@@ -94,6 +96,15 @@ export class ClockList extends React.Component {
     this.scrollTo(new Date());
   }
 
+  async scrollToNeighborPeriod(time) {
+    await this.setState({
+      isShiftBeingReset: true,
+      isScrollingToNeighborPeriod: true
+    });
+    await this.scrollTo(time);
+    this.setState({ isScrollingToNeighborPeriod: false });
+  }
+
   onScroll() {
     const { scrollLeft, clientWidth, scrollWidth } = this.scrollWrapper;
     const scrolledPosition = scrollLeft + clientWidth / 2;
@@ -110,7 +121,7 @@ export class ClockList extends React.Component {
     const isScrolledToEarliest = scrollLeft === 0;
     const isScrolledToLatest = scrollLeft + clientWidth === scrollWidth;
     if (isScrolledToEarliest || isScrolledToLatest) {
-      this.scrollTo(scrolledTime);
+      this.scrollToNeighborPeriod(scrolledTime);
     }
   }
 
@@ -119,11 +130,11 @@ export class ClockList extends React.Component {
   }
 
   openAddClockForm() {
-    this.setState({ addClockMode: true });
+    this.setState({ isAddClockMode: true });
   }
 
   closeAddClockForm() {
-    this.setState({ addClockMode: false });
+    this.setState({ isAddClockMode: false });
   }
 }
 ClockList.propTypes = {
@@ -177,6 +188,7 @@ function getShift(time, scrolledTime) {
 const ScrollWrapper = styled.div`
   min-height: 100vh;
   overflow-x: scroll;
+  scroll-behavior: ${props => (props.isScrollSmooth ? "smooth" : "auto")};
 `;
 
 const Scrubber = styled.div`

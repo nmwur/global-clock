@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import uniqid from "uniqid";
-import { isEmpty, isEqual } from "lodash";
 
 import { ClockList } from "./ClockList";
 import { ControlPanel } from "./ControlPanel";
-import { Hint } from "./Hint";
+import { Loader } from "./ui/Loader";
 import defaultClockList from "./defaultClockList.json";
 import { colors } from "ui/constants";
 
@@ -17,21 +16,11 @@ class App extends Component {
     isLoggedIn: false,
     clockList: [],
     isDefaultClockListModified: false,
-    isHintShown: false
+    isLoading: false
   };
 
   componentDidMount() {
     this.updateClockList();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const isInitiallyLoggedOut =
-      isEmpty(prevState.clockList) &&
-      isEqual(this.state.clockList, defaultClockList);
-
-    if (isInitiallyLoggedOut) {
-      this.setState({ isHintShown: true });
-    }
   }
 
   render() {
@@ -51,7 +40,7 @@ class App extends Component {
           resetShift={this.resetShift.bind(this)}
           updateClockList={this.updateClockList.bind(this)}
         />
-        {this.state.isHintShown && <Hint />}
+        {this.state.isLoading && <Loader />}
       </StyledApp>
     );
   }
@@ -71,6 +60,8 @@ class App extends Component {
 
   async updateClockList() {
     try {
+      this.setState({ isLoading: true });
+
       const response = await fetch(BACKEND_PATH, {
         credentials: "same-origin"
       });
@@ -82,34 +73,44 @@ class App extends Component {
       } else {
         this.setState({ isLoggedIn, clockList: defaultClockList });
       }
+
+      this.setState({ isLoading: false });
     } catch (err) {
       console.error(err);
     }
   }
 
   async addClock(city, timezone) {
-    const response = await fetch(
-      `${BACKEND_PATH}?city=${city}&timezone=${timezone}`,
-      {
-        method: "POST"
-      }
-    );
+    try {
+      this.setState({ isLoading: true });
 
-    const isLoggedIn = this.checkIfSignedIn(response.status);
-    if (isLoggedIn) {
-      const addedClock = await response.json();
-      const clockList = [...this.state.clockList, addedClock];
-      this.setState({ clockList });
-    } else {
-      const clockList = [
-        ...this.state.clockList,
+      const response = await fetch(
+        `${BACKEND_PATH}?city=${city}&timezone=${timezone}`,
         {
-          id: uniqid(),
-          city,
-          timezone
+          method: "POST"
         }
-      ];
-      this.setState({ clockList });
+      );
+
+      const isLoggedIn = this.checkIfSignedIn(response.status);
+      if (isLoggedIn) {
+        const addedClock = await response.json();
+        const clockList = [...this.state.clockList, addedClock];
+        this.setState({ clockList });
+      } else {
+        const clockList = [
+          ...this.state.clockList,
+          {
+            id: uniqid(),
+            city,
+            timezone
+          }
+        ];
+        this.setState({ clockList });
+      }
+
+      this.setState({ isLoading: false });
+    } catch (err) {
+      console.error(err);
     }
   }
 
