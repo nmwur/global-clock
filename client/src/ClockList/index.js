@@ -10,33 +10,45 @@ import { timeline } from "ui/constants";
 import { Clock } from "./Clock";
 import { AddClockButton } from "./AddClockButton";
 import { AddClockForm } from "./AddClockForm";
+import { Hint } from "ui/Hint";
 
 export class ClockList extends React.Component {
+  static getDerivedStateFromProps(props, state) {
+    if (props.isLoggedIn && state.isHintShown) {
+      return { isHintShown: false };
+    }
+
+    return null;
+  }
+
   state = {
     time: new Date(),
     shift: 0,
     timeScale: null,
     isAddClockMode: false,
     isShiftBeingReset: false,
-    isScrollingToNeighborPeriod: false
+    isHintShown: false
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     this.props.onRef(this);
-    this.scrollToNow();
-    window.addEventListener("resize", this.onWindowResize.bind(this));
+    window.addEventListener("resize", this.onWindowResize);
+    await this.scrollToNow();
+
+    if (!this.props.isLoggedIn) {
+      this.showHint();
+    }
   }
 
   componentWillUnmount() {
     this.props.onRef(undefined);
-    window.removeEventListener("resize", this.onWindowResize.bind(this));
+    window.removeEventListener("resize", this.onWindowResize);
   }
 
   render() {
     return (
       <ScrollWrapper
         ref={el => (this.scrollWrapper = el)}
-        isScrollSmooth={!this.state.isScrollingToNeighborPeriod}
         onScroll={this.onScroll.bind(this)}
       >
         <StyledClockList ref={el => (this.clockList = el)}>
@@ -75,6 +87,7 @@ export class ClockList extends React.Component {
           )}
         </StyledClockList>
         {!this.props.isEditMode && <Scrubber />}
+        {this.state.isHintShown && <Hint />}
       </ScrollWrapper>
     );
   }
@@ -97,12 +110,8 @@ export class ClockList extends React.Component {
   }
 
   async scrollToNeighborPeriod(time) {
-    await this.setState({
-      isShiftBeingReset: true,
-      isScrollingToNeighborPeriod: true
-    });
+    await this.setState({ isShiftBeingReset: true });
     await this.scrollTo(time);
-    this.setState({ isScrollingToNeighborPeriod: false });
   }
 
   onScroll() {
@@ -125,10 +134,6 @@ export class ClockList extends React.Component {
     }
   }
 
-  onWindowResize() {
-    this.scrollTo(this.state.time);
-  }
-
   openAddClockForm() {
     this.setState({ isAddClockMode: true });
   }
@@ -136,6 +141,22 @@ export class ClockList extends React.Component {
   closeAddClockForm() {
     this.setState({ isAddClockMode: false });
   }
+
+  showHint() {
+    this.setState({ isHintShown: true });
+    setTimeout(() => {
+      this.scrollWrapper.addEventListener("scroll", this.hideHint);
+    });
+  }
+
+  onWindowResize = () => {
+    this.scrollTo(this.state.time);
+  };
+
+  hideHint = () => {
+    this.setState({ isHintShown: false });
+    this.scrollWrapper.removeEventListener("scroll", this.hideHint);
+  };
 }
 ClockList.propTypes = {
   clockList: PropTypes.arrayOf(
@@ -146,7 +167,8 @@ ClockList.propTypes = {
     })
   ).isRequired,
   deleteClock: PropTypes.func,
-  isEditMode: PropTypes.bool.isRequired
+  isEditMode: PropTypes.bool.isRequired,
+  isLoggedIn: PropTypes.bool
 };
 
 function getTimezoneOffset(time) {
@@ -188,7 +210,6 @@ function getShift(time, scrolledTime) {
 const ScrollWrapper = styled.div`
   min-height: 100vh;
   overflow-x: scroll;
-  scroll-behavior: ${props => (props.isScrollSmooth ? "smooth" : "auto")};
 `;
 
 const Scrubber = styled.div`

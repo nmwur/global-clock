@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import DateTime from "react-datetime";
 
 import "./react-datetime.css";
-import { Popup } from "ui";
+import { Popup } from "ui/Popup";
 
 export class TimePicker extends React.Component {
   state = { time: null };

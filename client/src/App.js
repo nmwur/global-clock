@@ -4,7 +4,7 @@ import uniqid from "uniqid";
 
 import { ClockList } from "./ClockList";
 import { ControlPanel } from "./ControlPanel";
-import { Loader } from "./ui/Loader";
+import { Loader } from "ui/Loader";
 import defaultClockList from "./defaultClockList.json";
 import { colors } from "ui/constants";
 
@@ -31,6 +31,7 @@ class App extends Component {
           addClock={this.addClock.bind(this)}
           deleteClock={this.deleteClock.bind(this)}
           isEditMode={this.state.isEditMode}
+          isLoggedIn={this.state.isLoggedIn}
           onRef={ref => (this.clockList = ref)}
         />
         <ControlPanel

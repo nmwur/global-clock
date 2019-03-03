@@ -6,7 +6,7 @@ import PlacesAutocomplete, {
   getLatLng
 } from "react-places-autocomplete";
 
-import { Popup } from "ui";
+import { Popup } from "ui/Popup";
 
 export class AddClockForm extends React.Component {
   state = {
