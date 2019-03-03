@@ -6,6 +6,6 @@ Web app which helps to schedule meetings across different time zones.
 
 ## Features:
 - Scroll through time infinitely
-- Pick time and date in a specific city using calendar
-- Manage city & timezone list via Google Maps API
-- Sign in via Google Account to keep your city list saved
+- Pick time & date in a specific city using calendar
+- Manage list of cities / time zones using Google Maps API
+- Sign in with Google to save your list
