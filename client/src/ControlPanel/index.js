@@ -1,6 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+
+import { colors } from "ui/constants";
+
 import { UserLogin } from "./UserLogin";
 import { UserLogout } from "./UserLogout";
 
@@ -73,21 +76,19 @@ ControlPanel.propTypes = {
 };
 
 const Button = styled.button`
-  flex-basis: 33%;
-  border: 1px solid ${props => (props.isEditMode ? "#f5af5f" : "transparent")};
-  background: ${props => (props.isEditMode ? "#ffe187" : "none")};
+  flex-basis: 33.3%;
+  border: 1px solid white;
+  background: ${props => (props.isEditMode ? colors.bg : "none")};
   font-size: 20px;
   font-family: monospace;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 2px;
   outline: none;
   cursor: pointer;
 
   &:active {
-    border-color: #f5af5f;
-    background-color: #ffe187;
+    background-color: ${colors.bg};
   }
 
   &:disabled {

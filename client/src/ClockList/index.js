@@ -100,8 +100,8 @@ export class ClockList extends React.Component {
   async scrollTo(time) {
     await this.setState({ time, timeScale: getTimeScale(time) });
     const scaledTime = this.state.timeScale(time);
-    const halfScreenOffset = this.scrollWrapper.clientWidth / 2;
-    this.scrollWrapper.scrollLeft = scaledTime - halfScreenOffset;
+    const offsetToScrubber = this.scrollWrapper.clientWidth * 0.6;
+    this.scrollWrapper.scrollLeft = scaledTime - offsetToScrubber;
   }
 
   async scrollToNow() {
@@ -116,7 +116,8 @@ export class ClockList extends React.Component {
 
   onScroll() {
     const { scrollLeft, clientWidth, scrollWidth } = this.scrollWrapper;
-    const scrolledPosition = scrollLeft + clientWidth / 2;
+    const offsetToScrubber = clientWidth * 0.6;
+    const scrolledPosition = scrollLeft + offsetToScrubber;
 
     const scrolledTime = this.state.timeScale.invert(scrolledPosition);
 
@@ -214,18 +215,22 @@ const ScrollWrapper = styled.div`
 
 const Scrubber = styled.div`
   position: fixed;
-  top: 0;
-  left: 50%;
+  top: 40px;
+  left: 60%;
   z-index: 1;
-  width: 1px;
+  width: 3px;
   height: 100%;
-  border-left: 3px solid rgba(255, 255, 255, 40%);
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 255, 40%) 15%
+  );
   transform: translateX(-50%);
   pointer-events: none;
 `;
 
 const StyledClockList = styled.div`
-  padding-top: 30px;
+  padding-top: 100px;
   padding-bottom: 50px;
   box-sizing: border-box;
   width: calc(100vw * ${timeline.width});

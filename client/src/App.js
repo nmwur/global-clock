@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import uniqid from "uniqid";
 
+import { Header } from "./Header";
 import { ClockList } from "./ClockList";
 import { ControlPanel } from "./ControlPanel";
 import { Loader } from "ui/Loader";
@@ -26,6 +27,7 @@ class App extends Component {
   render() {
     return (
       <StyledApp>
+        <Header />
         <ClockList
           clockList={this.state.clockList}
           addClock={this.addClock.bind(this)}

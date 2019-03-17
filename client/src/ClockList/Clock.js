@@ -159,7 +159,7 @@ const Time = styled.div`
   display: inline-flex;
   justify-content: space-between;
   position: absolute;
-  left: calc(50% + 5px);
+  left: calc(60% + 5px);
   transform: translateY(-2px);
   pointer-events: none;
 `;

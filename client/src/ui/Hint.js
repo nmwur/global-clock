@@ -10,6 +10,8 @@ const Hint = ({ className }) => (
 const StyledHint = styled(Hint)`
   position: fixed;
   bottom: 100px;
+  width: 100%;
+  text-align: center;
   left: 50%;
   transform: translateX(-50%);
   font-size: 30px;
