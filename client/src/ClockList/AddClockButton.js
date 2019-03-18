@@ -3,18 +3,24 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 const AddClockButton = ({ onClick, className }) => (
-  <button onClick={onClick} className={className}>
-    [add clock]
-  </button>
+  <Wrapper>
+    <button onClick={onClick} className={className}>
+      [add clock]
+    </button>
+  </Wrapper>
 );
 AddClockButton.propTypes = {
   onClick: PropTypes.func.isRequired
 };
 
+const Wrapper = styled.div`
+  padding-bottom: 40px;
+`;
+
 const StyledAddClockButton = styled(AddClockButton)`
   position: absolute;
   display: inline-block;
-  padding: 2px 4px;
+  left: 4px;
   color: #555;
   font-family: monospace;
   border: 1px solid transparent;

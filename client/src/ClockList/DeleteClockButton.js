@@ -3,9 +3,9 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 const DeleteClockButton = ({ onClick, className }) => (
-  <div onClick={onClick} className={className}>
+  <button onClick={onClick} className={className}>
     [delete]
-  </div>
+  </button>
 );
 DeleteClockButton.propTypes = {
   onClick: PropTypes.func.isRequired
@@ -15,9 +15,10 @@ const StyledDeleteClockButton = styled(DeleteClockButton)`
   position: absolute;
   left: 240px;
   padding: 2px 4px;
-  background: none;
-  border: 1px solid transparent;
   color: #555;
+  font-family: monospace;
+  border: 1px solid transparent;
+  background: none;
   outline: none;
   cursor: pointer;
   user-select: none;
