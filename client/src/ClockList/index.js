@@ -51,7 +51,10 @@ export class ClockList extends React.Component {
         ref={el => (this.scrollWrapper = el)}
         onScroll={this.onScroll.bind(this)}
       >
-        <StyledClockList ref={el => (this.clockList = el)}>
+        <StyledClockList
+          ref={el => (this.clockList = el)}
+          isEditMode={this.props.isEditMode}
+        >
           <Clock
             city={`Local time`}
             time={this.state.time}
@@ -229,7 +232,7 @@ const Scrubber = styled.div`
 
 const StyledClockList = styled.div`
   padding-top: 100px;
-  padding-bottom: 50px;
+  padding-bottom: ${props => (props.isEditMode ? "90" : "50")}px;
   box-sizing: border-box;
   width: calc(100vw * ${timeline.width});
 `;
