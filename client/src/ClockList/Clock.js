@@ -7,7 +7,7 @@ import * as d3 from "d3";
 import getTimeScale from "./getTimeScale";
 import { timeline, colors } from "ui/constants";
 
-import { DeleteClockButton } from "./DeleteClockButton";
+import { Button } from "ui/Button";
 import { TimePicker } from "./TimePicker";
 
 export class Clock extends React.Component {
@@ -69,9 +69,12 @@ export class Clock extends React.Component {
           </PickDateButton>
         )}
 
-        {this.props.isEditMode && (
-          <DeleteClockButton onClick={this.deleteClockHandler.bind(this)} />
-        )}
+        {this.props.isEditMode &&
+          this.props.deleteClock && (
+            <Button onClick={this.deleteClockHandler.bind(this)} left={240}>
+              delete
+            </Button>
+          )}
 
         {this.state.isPickDateMode && (
           <TimePicker
@@ -176,10 +179,18 @@ const City = styled.div`
 const PickDateButton = styled.div`
   opacity: 0;
   position: absolute;
-  right: 5px;
+  right: 3px;
   cursor: pointer;
   pointer-events: none;
   transition: opacity 0.2s;
+
+  & span {
+    padding: 2px;
+  }
+
+  &:hover {
+    opacity: 1 !important;
+  }
 `;
 
 const StyledClock = styled.div`
@@ -188,7 +199,7 @@ const StyledClock = styled.div`
   width: 100%;
 
   &:hover ${PickDateButton} {
-    opacity: 1;
+    opacity: 0.4;
     pointer-events: auto;
   }
 `;

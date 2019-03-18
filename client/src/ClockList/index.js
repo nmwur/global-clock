@@ -8,7 +8,7 @@ import getTimeScale from "./getTimeScale";
 import { timeline } from "ui/constants";
 
 import { Clock } from "./Clock";
-import { AddClockButton } from "./AddClockButton";
+import { Button } from "ui/Button";
 import { AddClockForm } from "./AddClockForm";
 import { Hint } from "ui/Hint";
 
@@ -77,7 +77,9 @@ export class ClockList extends React.Component {
             />
           ))}
           {this.props.isEditMode && (
-            <AddClockButton onClick={this.openAddClockForm.bind(this)} />
+            <Button left={5} onClick={this.openAddClockForm.bind(this)}>
+              add city
+            </Button>
           )}
           {this.state.isAddClockMode && (
             <AddClockForm
