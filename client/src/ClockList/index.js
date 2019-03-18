@@ -215,16 +215,12 @@ const ScrollWrapper = styled.div`
 
 const Scrubber = styled.div`
   position: fixed;
-  top: 40px;
+  top: 0;
   left: 60%;
   z-index: 1;
   width: 3px;
   height: 100%;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(255, 255, 255, 40%) 15%
-  );
+  background-color: rgba(255, 255, 255, 40%);
   transform: translateX(-50%);
   pointer-events: none;
 `;

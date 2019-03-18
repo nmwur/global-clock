@@ -77,7 +77,9 @@ ControlPanel.propTypes = {
 
 const Button = styled.button`
   flex-basis: 33.3%;
-  border: 1px solid white;
+  border: none;
+  border-top: 1px solid
+    ${props => (props.isEditMode ? colors.text : "transparent")};
   background: ${props => (props.isEditMode ? colors.bg : "none")};
   font-size: 20px;
   font-family: monospace;
@@ -88,6 +90,7 @@ const Button = styled.button`
   cursor: pointer;
 
   &:active {
+    border-top: 1px solid ${colors.text};
     background-color: ${colors.bg};
   }
 
