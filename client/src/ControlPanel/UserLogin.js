@@ -22,9 +22,7 @@ export class UserLogin extends React.Component {
     return (
       <Popup onClose={this.props.closeUserPopup.bind(this)}>
         <StyledUserLogin>
-          <Appeal>
-            Log in with your Google account to be able to save clocks:
-          </Appeal>
+          <Appeal>Sign in with Google to save your list of cities:</Appeal>
           <div id="login-button" />
         </StyledUserLogin>
       </Popup>

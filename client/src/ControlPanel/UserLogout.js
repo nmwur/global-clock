@@ -20,12 +20,12 @@ export class UserLogout extends React.Component {
     return (
       <Popup onClose={this.props.closeUserPopup.bind(this)}>
         <StyledUserLogout>
-          <Appeal>Log out of your Google account:</Appeal>
+          <Appeal>To sign out of your Google account:</Appeal>
           <Button
             disabled={!this.state.isGapiLoaded}
             onClick={this.logout.bind(this)}
           >
-            Logout
+            Sign out
           </Button>
         </StyledUserLogout>
       </Popup>
