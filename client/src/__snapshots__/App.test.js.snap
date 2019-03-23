@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<styled.div>
+  <Styled(Header) />
+  <ClockList
+    addClock={[Function]}
+    clockList={Array []}
+    deleteClock={[Function]}
+    isEditMode={false}
+    isLoggedIn={false}
+    onRef={[Function]}
+  />
+  <ControlPanel
+    isEditMode={false}
+    isLoggedIn={false}
+    resetShift={[Function]}
+    toggleEditMode={[Function]}
+    updateClockList={[Function]}
+  />
+  <Loader />
+</styled.div>
+`;

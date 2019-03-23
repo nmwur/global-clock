@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<styled.div>
+  <styled.button
+    onClick={[Function]}
+  >
+    <span
+      aria-label="reset"
+      role="img"
+    >
+      🔃
+    </span>
+  </styled.button>
+  <styled.button
+    isEditMode={false}
+    onClick={[Function]}
+  >
+    <span
+      aria-label="edit"
+      role="img"
+    >
+      ✏️
+    </span>
+  </styled.button>
+  <styled.button
+    onClick={[Function]}
+  >
+    login
+  </styled.button>
+</styled.div>
+`;
