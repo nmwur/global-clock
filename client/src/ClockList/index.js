@@ -14,7 +14,7 @@ import { Hint } from "ui/Hint";
 
 export class ClockList extends React.Component {
   static getDerivedStateFromProps(props, state) {
-    if (props.isLoggedIn && state.isHintShown) {
+    if ((props.isLoggedIn || props.isEditMode) && state.isHintShown) {
       return { isHintShown: false };
     }
 
