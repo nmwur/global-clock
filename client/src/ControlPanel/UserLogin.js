@@ -24,6 +24,12 @@ export class UserLogin extends React.Component {
         <StyledUserLogin>
           <Appeal>Sign in with Google to save your list of cities:</Appeal>
           <div id="login-button" />
+          <PrivacyPolicy
+            href="https://www.freeprivacypolicy.com/privacy/view/83a83a35c556983375464ead69c58b54"
+            target="_blank"
+          >
+            Privacy policy
+          </PrivacyPolicy>
         </StyledUserLogin>
       </Popup>
     );
@@ -80,6 +86,12 @@ const Appeal = styled.div`
   color: #343434;
   font-size: 16px;
   margin-bottom: 10px;
+`;
+
+const PrivacyPolicy = styled.a`
+  font-size: 10px;
+  color: grey;
+  text-decoration: inherit;
 `;
 
 const StyledUserLogin = styled.div`
