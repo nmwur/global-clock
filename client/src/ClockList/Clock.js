@@ -43,12 +43,12 @@ export class Clock extends React.Component {
   render() {
     const scrolledTime = getScrolledTime(this.props.time, this.props.shift);
 
-    let roundedTime =
-      this.props.shift === 0
-        ? scrolledTime
-        : roundToNearestMinutes(scrolledTime, 15);
+    // let roundedTime =
+    //   this.props.shift === 0
+    //     ? scrolledTime
+    //     : roundToNearestMinutes(scrolledTime, 15);
 
-    const formattedTime = format(roundedTime, "hh:mm A");
+    const formattedTime = format(scrolledTime, "hh:mm A");
 
     const timezoneInHours = `${this.props.timezoneOffset > 0 ? "+" : ""}${this
       .props.timezoneOffset / 60}`;
@@ -69,12 +69,11 @@ export class Clock extends React.Component {
           </PickDateButton>
         )}
 
-        {this.props.isEditMode &&
-          this.props.deleteClock && (
-            <Button onClick={this.deleteClockHandler.bind(this)} left={240}>
-              delete
-            </Button>
-          )}
+        {this.props.isEditMode && this.props.deleteClock && (
+          <Button onClick={this.deleteClockHandler.bind(this)} left={240}>
+            delete
+          </Button>
+        )}
 
         {this.state.isPickDateMode && (
           <TimePicker
