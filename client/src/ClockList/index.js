@@ -225,7 +225,11 @@ const Scrubber = styled.div`
   z-index: 1;
   width: 3px;
   height: 100%;
-  background-color: rgba(255, 255, 255, 40%);
+  background: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 40%) 80%,
+    transparent 100%
+  );
   transform: translateX(-50%);
   pointer-events: none;
 `;
