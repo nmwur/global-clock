@@ -43,11 +43,6 @@ export class Clock extends React.Component {
   render() {
     const scrolledTime = getScrolledTime(this.props.time, this.props.shift);
 
-    // let roundedTime =
-    //   this.props.shift === 0
-    //     ? scrolledTime
-    //     : roundToNearestMinutes(scrolledTime, 15);
-
     const formattedTime = format(scrolledTime, "hh:mm A");
 
     const timezoneInHours = `${this.props.timezoneOffset > 0 ? "+" : ""}${this
@@ -143,11 +138,6 @@ Clock.propTypes = {
   isisEditMode: PropTypes.bool,
   deleteClock: PropTypes.func
 };
-
-function roundToNearestMinutes(date, interval) {
-  var roundedMinutes = Math.floor(getMinutes(date) / interval) * interval;
-  return setMinutes(startOfMinute(date), roundedMinutes);
-}
 
 function getScrolledTime(time, shift) {
   return new Date(Number(time) + shift);
