@@ -51,9 +51,8 @@ app.get('/', (req, res) => {
 });
 
 app.use((err, req, res) => {
-  console.log(err);
-  console.log(err);
-  console.log(err);
+  console.log('res.status:');
+  console.log(res.status);
   console.log('===');
   res.status(err.status || 500).json({
     error: {
