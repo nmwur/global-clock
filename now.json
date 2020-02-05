@@ -11,7 +11,7 @@
     },
     {
       "src": "server/index.js",
-      "use": "@now/node-server"
+      "use": "@now/node"
     }
   ],
   "routes": [
