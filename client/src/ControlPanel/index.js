@@ -33,7 +33,9 @@ export class ControlPanel extends React.Component {
           {this.props.isLoggedIn ? (
             <UserPic src={this.state.userPicUrl} />
           ) : (
-            `login`
+            <span role="img" aria-label="reset">
+              👤
+            </span>
           )}
         </Button>
 

@@ -52,7 +52,7 @@ const StyledHeader = styled(Header)`
   position: fixed;
   width: 100%;
   height: 100px;
-  background: linear-gradient(to bottom, ${colors.bg} 50%, transparent 100%);
+  background: colors.bg;
   z-index: 2;
   pointer-events: none;
 `;
