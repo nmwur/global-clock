@@ -1,21 +1,15 @@
 {
-  "name": "Global Clock",
   "short_name": "Global Clock",
+  "name": "Global Clock",
   "icons": [
     {
-      "src": "%PUBLIC_URL%/android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "%PUBLIC_URL%/android-chrome-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
-  "display": "standalone",
   "start_url": ".",
-  "prefer_related_applications": false
+  "display": "standalone",
+  "theme_color": "#eeeeee",
+  "background_color": "#ffffff"
 }

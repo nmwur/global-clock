@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { format } from "date-fns";
+import { format, getMinutes, setMinutes, startOfMinute } from "date-fns";
 import PropTypes from "prop-types";
 import * as d3 from "d3";
 
@@ -43,7 +43,12 @@ export class Clock extends React.Component {
   render() {
     const scrolledTime = getScrolledTime(this.props.time, this.props.shift);
 
-    const formattedTime = format(scrolledTime, "hh:mm A");
+    let roundedTime =
+      this.props.shift === 0
+        ? scrolledTime
+        : roundToNearestMinutes(scrolledTime, 15);
+
+    const formattedTime = format(roundedTime, "hh:mm A");
 
     const timezoneInHours = `${this.props.timezoneOffset > 0 ? "+" : ""}${this
       .props.timezoneOffset / 60}`;
@@ -64,11 +69,12 @@ export class Clock extends React.Component {
           </PickDateButton>
         )}
 
-        {this.props.isEditMode && this.props.deleteClock && (
-          <Button onClick={this.deleteClockHandler.bind(this)} left={240}>
-            delete
-          </Button>
-        )}
+        {this.props.isEditMode &&
+          this.props.deleteClock && (
+            <Button onClick={this.deleteClockHandler.bind(this)} left={240}>
+              delete
+            </Button>
+          )}
 
         {this.state.isPickDateMode && (
           <TimePicker
@@ -138,6 +144,11 @@ Clock.propTypes = {
   isisEditMode: PropTypes.bool,
   deleteClock: PropTypes.func
 };
+
+function roundToNearestMinutes(date, interval) {
+  var roundedMinutes = Math.floor(getMinutes(date) / interval) * interval;
+  return setMinutes(startOfMinute(date), roundedMinutes);
+}
 
 function getScrolledTime(time, shift) {
   return new Date(Number(time) + shift);
