@@ -1,6 +1,6 @@
 # Global Clock
 
-Web app which helps to schedule meetings across different time zones.
+Web app to help schedule meetings across time zones.
 
 [https://global-clock.now.sh](https://global-clock.now.sh)
 
@@ -16,3 +16,12 @@ Web app which helps to schedule meetings across different time zones.
   <img src="docs/edit-2.png" alt="edit screenshot" width="240px" />
 - Sign in with Google to save your list:\
   <img src="docs/login.png" alt="scroll login" width="240px" />
+
+## Stack
+
+- react
+- d3
+- express
+- mongodb
+- google maps api
+- google sign-in
